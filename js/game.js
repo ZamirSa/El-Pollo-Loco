@@ -30,6 +30,10 @@ window.addEventListener('keydown', (e) => {
     if (e.key == " ") {
         keyboard.SPACE = true;
     }
+
+    if (e.key == "d") {
+        keyboard.D = true;
+    }
 });
 
 window.addEventListener('keyup', (e) => {
@@ -51,5 +55,9 @@ window.addEventListener('keyup', (e) => {
 
     if (e.key == " ") {
         keyboard.SPACE = false;
+    }
+
+    if (e.key == "d") {
+        keyboard.D = false;
     }
 });
