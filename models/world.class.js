@@ -7,6 +7,7 @@ class World {
     camera_x = 0;
     statusBar = new StatusBar();
     statusBarCoin = new StatusBarCoin();
+    statusBarBottle = new StatusBarBottle();
     throwableObjects = [];
 
     constructor(canvas, keyboard) {
@@ -30,9 +31,11 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D) {
+        if (this.keyboard.D && this.character.bottles > 0) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
+            this.character.bottles -= 10;
+            this.statusBarBottle.setPercentage(this.character.bottles);
         }
     }
 
@@ -44,13 +47,22 @@ class World {
             }
         });
 
-        this.level.collectableObjects.forEach((coin) => {
+        this.level.coins.forEach((coin, i) => {
             if (this.character.isColliding(coin) && this.character.coins < 101) {
-                this.character.collect();
+                this.character.collectCoin();
                 this.statusBarCoin.setPercentage(this.character.coins);
+                this.level.coins.splice(i, 1);
             }
         });
 
+        this.level.bottles.forEach((bottle, i) => {
+            if (this.character.isColliding(bottle) && this.character.bottles < 101) {
+                this.character.collectBottle();
+                this.statusBarBottle.setPercentage(this.character.bottles);
+                this.level.bottles.splice(i, 1)
+                console.log(this.character.bottles);
+            }
+        });
     }
 
     draw() {
@@ -58,17 +70,19 @@ class World {
 
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.backgroundObjects);
+        this.addObjectsToMap(this.level.clouds);
 
         this.ctx.translate(-this.camera_x, 0);
         // ---------Space for fixed objects --------
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoin);
+        this.addToMap(this.statusBarBottle);
         this.ctx.translate(this.camera_x, 0);
 
         this.addToMap(this.character);
-        this.addObjectsToMap(this.level.clouds);
         this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.level.collectableObjects);
+        this.addObjectsToMap(this.level.coins);
+        this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
