@@ -27,7 +27,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 200)
+        }, 1000 / 60)
     }
 
     checkThrowObjects() {
@@ -41,11 +41,26 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
+            if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
+
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
+            }
+        });
+
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0) {
+                console.log("true")
+                enemy.energy -= 100;
+                console.log(enemy.energy)
+            }
+        })
 
         this.level.coins.forEach((coin, i) => {
             if (this.character.isColliding(coin) && this.character.coins < 101) {
@@ -79,8 +94,8 @@ class World {
         this.addToMap(this.statusBarBottle);
         this.ctx.translate(this.camera_x, 0);
 
-        this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
+        this.addToMap(this.character);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.throwableObjects);
