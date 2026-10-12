@@ -31,12 +31,18 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.D && this.character.bottles > 0) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+        if (this.character.otherDirection == false && this.keyboard.D && this.character.bottles > 0) {
+            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, false);
+            this.throwableObjects.push(bottle);
+            this.character.bottles -= 10;
+            this.statusBarBottle.setPercentage(this.character.bottles);
+        } else if (this.character.otherDirection == true && this.keyboard.D && this.character.bottles > 0) {
+            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, true);
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
         }
+
     }
 
 
@@ -50,10 +56,11 @@ class World {
 
         this.level.enemies.forEach((enemy) => {
             this.throwableObjects.forEach((throwableObject) => {
-                if (throwableObject.isColliding(enemy) && enemy.energy > 0) {
-                    enemy.energy -= 100; 
+                if (throwableObject.isColliding(enemy) && enemy.energy > 0 && throwableObject.energy > 0) {
+                    enemy.energy -= 100;
                     throwableObject.enemyHit = true;
-                    console.log(throwableObject)
+                    throwableObject.energy = 0;
+                    console.log(enemy.energy)
                 }
             });
         });
