@@ -27,7 +27,7 @@ class World {
         setInterval(() => {
             this.checkCollisions();
             this.checkThrowObjects();
-        }, 1000 / 60)
+        }, 1000 / 10)
     }
 
     checkThrowObjects() {
@@ -39,12 +39,23 @@ class World {
         }
     }
 
+
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
             }
+        });
+
+        this.level.enemies.forEach((enemy) => {
+            this.throwableObjects.forEach((throwableObject) => {
+                if (throwableObject.isColliding(enemy) && enemy.energy > 0) {
+                    enemy.energy -= 100; 
+                    throwableObject.enemyHit = true;
+                    console.log(throwableObject)
+                }
+            });
         });
 
         this.level.enemies.forEach((enemy) => {
@@ -56,11 +67,11 @@ class World {
 
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0) {
-                console.log("true")
                 enemy.energy -= 100;
                 console.log(enemy.energy)
             }
         })
+
 
         this.level.coins.forEach((coin, i) => {
             if (this.character.isColliding(coin) && this.character.coins < 101) {
