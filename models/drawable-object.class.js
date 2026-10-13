@@ -13,6 +13,11 @@ class DrawableObject {
         this.img.src = path;
     }
 
+    loadAudio(path) {
+        this.audio = new Audio();
+        this.audio.src = path;
+    }
+
     drawFrame(ctx) {
 
         if (this instanceof Character || this instanceof Chicken || this instanceof Coins || this instanceof Bottle || this instanceof ChickenSmall || this instanceof Endboss) {

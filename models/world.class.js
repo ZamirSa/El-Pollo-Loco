@@ -9,6 +9,7 @@ class World {
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
     throwableObjects = [];
+    cooldown = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -25,27 +26,30 @@ class World {
 
     run() {
         setInterval(() => {
+            this.checkThrowObjects();
+        }, 1000 / 30)
+        setInterval(() => {
+            this.checkDamage();
             this.checkCollisions();
         }, 1000 / 60)
-        setInterval(() => {
-            this.checkThrowObjects();
-            this.checkDamage();
-        }, 1000 / 5)
     }
 
     checkThrowObjects() {
-        if (this.character.otherDirection == false && this.keyboard.D && this.character.bottles > 0) {
+        if (this.character.otherDirection == false && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, false);
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
-        } else if (this.character.otherDirection == true && this.keyboard.D && this.character.bottles > 0) {
+            this.cooldown = 0;
+        } else if (this.character.otherDirection == true && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, true);
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
-        }
+            this.cooldown = 0;
+        } 
 
+        this.cooldown += 0.0333333333333333;
     }
 
 
@@ -62,17 +66,21 @@ class World {
         });
 
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0) {
+            if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0 && this.character.speedY < 0 && this.character.y + this.character.offset.top < enemy.y) {
                 enemy.hit(100);
-                console.log(enemy.energy)
+            }
+        })
+
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.x > enemy.x && !enemy.isDead()) {
+                enemy.otherDirection = true;
+            } else {
+                enemy.otherDirection = false;
             }
         })
 
 
-
-
-
-        if (this.character.x >= this.level.enemies.at(-1).x - 400) {
+        if (this.character.x >= this.level.enemies.at(-1).x - 600) {
             let endboss = this.level.enemies.at(-1);
             endboss.alerted = true;
         }
@@ -85,13 +93,6 @@ class World {
             endboss.attack = false;
         }
 
-        if (this.character.x > this.level.enemies.at(-1).x) {
-            let endboss = this.level.enemies.at(-1);
-            endboss.otherDirection = true;
-        } else {
-            let endboss = this.level.enemies.at(-1);
-            endboss.otherDirection = false;
-        }
 
 
 
@@ -116,7 +117,7 @@ class World {
 
     checkDamage() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
+            if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround() && !this.character.isHurt()) {
                 this.character.hit(5);
                 this.statusBar.setPercentage(this.character.energy);
             }
