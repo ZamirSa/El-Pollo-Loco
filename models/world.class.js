@@ -53,7 +53,7 @@ class World {
         this.level.enemies.forEach((enemy) => {
             this.throwableObjects.forEach((throwableObject) => {
                 if (throwableObject.isColliding(enemy) && enemy.energy > 0 && throwableObject.energy > 0) {
-                    enemy.energy -= 100;
+                    enemy.hit(100);
                     throwableObject.enemyHit = true;
                     throwableObject.energy = 0;
                     console.log(enemy.energy)
@@ -63,19 +63,38 @@ class World {
 
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0) {
-                enemy.energy -= 100;
+                enemy.hit(100);
                 console.log(enemy.energy)
             }
         })
 
-        if (this.character.x >= 2100) {
+
+
+
+
+        if (this.character.x >= this.level.enemies.at(-1).x - 400) {
             let endboss = this.level.enemies.at(-1);
             endboss.alerted = true;
         }
 
-        if (this.level.enemies.at(-1).x - this.character.x < 200) {
-            console.log("attack")
+        if (this.level.enemies.at(-1).otherDirection == false && this.level.enemies.at(-1).x - this.character.x < 60 || this.level.enemies.at(-1).otherDirection == true && this.character.x - this.level.enemies.at(-1).x < 60) {
+            let endboss = this.level.enemies.at(-1);
+            endboss.attack = true;
+        } else if (this.level.enemies.at(-1).otherDirection == false && this.level.enemies.at(-1).x - this.character.x > 60 || this.level.enemies.at(-1).otherDirection == true && this.character.x - this.level.enemies.at(-1).x > 60) {
+            let endboss = this.level.enemies.at(-1);
+            endboss.attack = false;
         }
+
+        if (this.character.x > this.level.enemies.at(-1).x) {
+            let endboss = this.level.enemies.at(-1);
+            endboss.otherDirection = true;
+        } else {
+            let endboss = this.level.enemies.at(-1);
+            endboss.otherDirection = false;
+        }
+
+
+
 
         this.level.coins.forEach((coin, i) => {
             if (this.character.isColliding(coin) && this.character.coins < 101) {
@@ -98,7 +117,7 @@ class World {
     checkDamage() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
-                this.character.hit();
+                this.character.hit(5);
                 this.statusBar.setPercentage(this.character.energy);
             }
         });
