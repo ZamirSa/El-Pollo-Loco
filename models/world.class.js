@@ -26,8 +26,11 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
+        }, 1000 / 60)
+        setInterval(() => {
             this.checkThrowObjects();
-        }, 1000 / 10)
+            this.checkDamage();
+        }, 1000 / 5)
     }
 
     checkThrowObjects() {
@@ -48,13 +51,6 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
-            }
-        });
-
-        this.level.enemies.forEach((enemy) => {
             this.throwableObjects.forEach((throwableObject) => {
                 if (throwableObject.isColliding(enemy) && enemy.energy > 0 && throwableObject.energy > 0) {
                     enemy.energy -= 100;
@@ -66,19 +62,20 @@ class World {
         });
 
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
-            }
-        });
-
-        this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0) {
                 enemy.energy -= 100;
                 console.log(enemy.energy)
             }
         })
 
+        if (this.character.x >= 2100) {
+            let endboss = this.level.enemies.at(-1);
+            endboss.alerted = true;
+        }
+
+        if (this.level.enemies.at(-1).x - this.character.x < 200) {
+            console.log("attack")
+        }
 
         this.level.coins.forEach((coin, i) => {
             if (this.character.isColliding(coin) && this.character.coins < 101) {
@@ -94,6 +91,15 @@ class World {
                 this.statusBarBottle.setPercentage(this.character.bottles);
                 this.level.bottles.splice(i, 1)
                 console.log(this.character.bottles);
+            }
+        });
+    }
+
+    checkDamage() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround()) {
+                this.character.hit();
+                this.statusBar.setPercentage(this.character.energy);
             }
         });
     }
