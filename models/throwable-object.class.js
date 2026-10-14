@@ -14,6 +14,7 @@ class ThrowableObject extends MovableObject {
         '../img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ];
     enemyHit = false;
+    fall = true;
 
 
     constructor(x, y, otherDirection) {
@@ -35,10 +36,12 @@ class ThrowableObject extends MovableObject {
 
 
         setInterval(() => {
-            if (this.otherDirection == false) {
+            if (this.otherDirection == false && this.fall == true) {
                 this.x += 10;
-            } else {
+            } else if (this.otherDirection == true && this.fall == true) {
                 this.x -= 10;
+            } else {
+                this.x
             }
         }, 25);
     }
@@ -47,6 +50,8 @@ class ThrowableObject extends MovableObject {
         setInterval(() => {
             if (this.enemyHit == true) {
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+                this.speedY = 0;
+                this.fall = false;
             } else {
                 this.playAnimation(this.IMAGES_BOTTLE);
             }

@@ -10,6 +10,7 @@ class World {
     statusBarBottle = new StatusBarBottle();
     throwableObjects = [];
     cooldown = 0;
+    bottleIndex = -1;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -41,13 +42,15 @@ class World {
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
             this.cooldown = 0;
+            this.bottleIndex++
         } else if (this.character.otherDirection == true && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, true);
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
             this.cooldown = 0;
-        } 
+            this.bottleIndex++
+        }
 
         this.cooldown += 0.0333333333333333;
     }
@@ -60,10 +63,26 @@ class World {
                     enemy.hit(100);
                     throwableObject.enemyHit = true;
                     throwableObject.energy = 0;
-                    console.log(enemy.energy)
+                    setTimeout(() => {
+                        this.throwableObjects.splice(this.bottleIndex, 1)
+                        this.bottleIndex--;
+                    }, 300);
                 }
             });
         });
+
+
+        this.throwableObjects.forEach((throwableObject) => {
+            if (throwableObject.y > 370 && throwableObject.energy > 0) {
+                throwableObject.enemyHit = true;
+                throwableObject.energy = 0;
+                setTimeout(() => {
+                    this.throwableObjects.splice(this.bottleIndex, 1)
+                    this.bottleIndex--;
+                }, 300);
+            }
+        });
+
 
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0 && this.character.speedY < 0 && this.character.y + this.character.offset.top < enemy.y) {
@@ -101,6 +120,7 @@ class World {
             if (this.character.isColliding(coin) && this.character.coins < 101) {
                 this.character.collectCoin();
                 this.statusBarCoin.setPercentage(this.character.coins);
+                coin.energy = 0;
                 this.level.coins.splice(i, 1);
             }
         });
@@ -120,6 +140,11 @@ class World {
             if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround() && !this.character.isHurt()) {
                 this.character.hit(5);
                 this.statusBar.setPercentage(this.character.energy);
+
+                if (this.character.isColliding(this.level.enemies.at(-1))) {
+                    this.character.hit(15);
+                    this.statusBar.setPercentage(this.character.energy);
+                }
             }
         });
     }

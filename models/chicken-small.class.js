@@ -2,7 +2,7 @@ class ChickenSmall extends MovableObject {
     y = 380;
     height = 45;
     width = 45;
-        offset = {
+    offset = {
         top: 5,
         bottom: 5,
         left: 5,
@@ -14,11 +14,16 @@ class ChickenSmall extends MovableObject {
         '../img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ]
 
+    AUDIO_DEAD = [
+        '../audio/chicken-small-dead.wav'
+    ]
+
     constructor() {
         super().loadImage('../img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
+        this.deadSound = new Audio(this.AUDIO_DEAD);
 
-        this.x = 200 + Math.random() * 2100; // Zahl zwischen 200 und 700
+        this.x = 300 + Math.random() * 2100; // Zahl zwischen 200 und 700
         this.speed = 0.15 + Math.random() * 0.25;
         this.animate();
     }
@@ -39,6 +44,16 @@ class ChickenSmall extends MovableObject {
                 this.loadImage('../img/3_enemies_chicken/chicken_small/2_dead/dead.png');
             }
         }, 150);
+
+
+        setInterval(() => {
+            if (this.isDead() && !this.soundPlayed) {
+                this.deadSound.play()
+                this.soundPlayed = true;
+            }
+        }, 150);
     }
+
+
 
 }
