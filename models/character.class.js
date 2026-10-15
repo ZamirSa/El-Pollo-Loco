@@ -76,6 +76,13 @@ class Character extends MovableObject {
         '../img/2_character_pepe/1_idle/long_idle/I-20.png',
     ];
 
+    AUDIO_HURT = [
+        '../audio/character-hurt.wav'
+    ]
+
+    AUDIO_JUMP = [
+        '../audio/character-jump.mp3'
+    ]
 
     world;
     idleTime = 0;
@@ -89,6 +96,10 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_FALLING);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
+        this.hurtSound = new Audio(this.AUDIO_HURT);
+        this.hurtSound.volume = 0.5;
+        this.jumpSound = new Audio(this.AUDIO_JUMP);
+        this.jumpSound.volume = 0.5;
         this.applyGravity()
         this.animate();
     }
@@ -127,7 +138,7 @@ class Character extends MovableObject {
 
 
         setInterval(() => {
-             if (this.isAboveGround() && this.speedY >  0) {
+            if (this.isAboveGround() && this.speedY > 0) {
                 this.playAnimation(this.IMAGES_JUMPING);
             } else if (this.isAboveGround() && this.speedY < 0) {
                 this.playAnimation(this.IMAGES_FALLING);
@@ -151,6 +162,12 @@ class Character extends MovableObject {
                 }
             }
         }, 50);
+
+        setInterval(() => {
+            if (this.isHurt() && !this.soundPlayed) {
+                this.hurtSound.play()
+            }
+        }, 150);
 
     }
 

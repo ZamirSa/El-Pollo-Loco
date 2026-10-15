@@ -16,7 +16,7 @@ class Bottle extends MovableObject {
     constructor() {
         super().loadImage('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.collectSound = new Audio(this.AUDIO_COLLECT);
-        this.collectSound.volume = 0.5;
+        this.collectSound.volume = 0.3;
 
         this.x = 200 + Math.random() * 2100;
 

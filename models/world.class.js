@@ -8,6 +8,7 @@ class World {
     statusBar = new StatusBar();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    statusBarEndboss = new StatusBarEndboss();
     throwableObjects = [];
     cooldown = 0;
     bottleIndex = -1;
@@ -95,6 +96,10 @@ class World {
             endboss.alerted = true;
         }
 
+        if (this.level.enemies.at(-1).alerted == true) {
+            this.statusBarEndboss.alert = true;
+        }
+
         if (this.level.enemies.at(-1).otherDirection == false && this.level.enemies.at(-1).x - this.character.x < 60 || this.level.enemies.at(-1).otherDirection == true && this.character.x - this.level.enemies.at(-1).x < 60) {
             let endboss = this.level.enemies.at(-1);
             endboss.attack = true;
@@ -109,6 +114,10 @@ class World {
         } else {
             let endboss = this.level.enemies.at(-1);
             endboss.otherDirection = false;
+        }
+
+        if (this.level.enemies.at(-1).isHurt()) {
+            this.statusBarEndboss.setPercentage(this.level.enemies.at(-1).energy / 10);
         }
 
 
@@ -164,6 +173,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
+        this.addToMap(this.statusBarEndboss);
         this.ctx.translate(this.camera_x, 0);
 
         this.addObjectsToMap(this.level.enemies);
