@@ -95,19 +95,19 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.isDead()) {
                 this.moveRight();
                 this.otherDirection = false;
                 this.idleTime = 0;
             }
 
-            if (this.world.keyboard.LEFT && this.x > 0) {
+            if (this.world.keyboard.LEFT && this.x > 0 && !this.isDead()) {
                 this.moveLeft();
                 this.otherDirection = true;
                 this.idleTime = 0;
             }
 
-            if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.isHurt()) {
+            if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.isHurt() && !this.isDead()) {
                 this.jump();
                 this.idleTime = 0;
             }

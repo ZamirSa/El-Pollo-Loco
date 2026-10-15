@@ -36,14 +36,14 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.character.otherDirection == false && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2) {
+        if (this.character.otherDirection == false && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2 && !this.character.isHurt()) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, false);
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
             this.cooldown = 0;
             this.bottleIndex++
-        } else if (this.character.otherDirection == true && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2) {
+        } else if (this.character.otherDirection == true && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2 && !this.character.isHurt()) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, true);
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
@@ -90,15 +90,6 @@ class World {
             }
         })
 
-        this.level.enemies.forEach((enemy) => {
-            if (this.character.x > enemy.x && !enemy.isDead()) {
-                enemy.otherDirection = true;
-            } else {
-                enemy.otherDirection = false;
-            }
-        })
-
-
         if (this.character.x >= this.level.enemies.at(-1).x - 600) {
             let endboss = this.level.enemies.at(-1);
             endboss.alerted = true;
@@ -112,6 +103,13 @@ class World {
             endboss.attack = false;
         }
 
+        if (this.character.x > this.level.enemies.at(-1).x) {
+            let endboss = this.level.enemies.at(-1);
+            endboss.otherDirection = true;
+        } else {
+            let endboss = this.level.enemies.at(-1);
+            endboss.otherDirection = false;
+        }
 
 
 
@@ -129,8 +127,8 @@ class World {
             if (this.character.isColliding(bottle) && this.character.bottles < 101) {
                 this.character.collectBottle();
                 this.statusBarBottle.setPercentage(this.character.bottles);
+                bottle.energy = 0;
                 this.level.bottles.splice(i, 1)
-                console.log(this.character.bottles);
             }
         });
     }
@@ -147,6 +145,11 @@ class World {
                 }
             }
         });
+
+        if (this.character.isDead()) {
+
+        }
+
     }
 
     draw() {
