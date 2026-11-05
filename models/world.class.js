@@ -1,6 +1,6 @@
 class World {
     character = new Character();
-    level = level1;
+    level;
     canvas
     ctx;
     keyboard;
@@ -12,25 +12,47 @@ class World {
     throwableObjects = [];
     cooldown = 0;
     bottleIndex = -1;
+    gameOver = false;
 
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard, restartRound = false) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
-        this.keyboard = keyboard
+        this.keyboard = keyboard;
+        this.level = createLevel1();
+        if (restartRound) {
+            this.level.enemies.forEach((enemy) => {
+                if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
+                    enemy.x = 200 + Math.random() * 2100;
+                }
+            });
+        }
+        this.statusBarEndboss.world = this;
         this.draw();
         this.setWorld();
         this.run();
+        document.getElementById('game-over').hidden = true;
     }
 
     setWorld() {
         this.character.world = this;
+        [
+            ...this.level.enemies,
+            ...this.level.clouds,
+            ...this.level.backgroundObjects,
+            ...this.level.coins,
+            ...this.level.bottles
+        ].forEach((object) => {
+            object.world = this;
+        });
     }
 
     run() {
         setInterval(() => {
+            if (this.gameOver) return;
             this.checkThrowObjects();
         }, 1000 / 30)
         setInterval(() => {
+            if (this.gameOver) return;
             this.checkDamage();
             this.checkCollisions();
         }, 1000 / 60)
@@ -39,6 +61,7 @@ class World {
     checkThrowObjects() {
         if (this.character.otherDirection == false && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2 && !this.character.isHurt()) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, false);
+            bottle.world = this;
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
@@ -46,6 +69,7 @@ class World {
             this.bottleIndex++
         } else if (this.character.otherDirection == true && this.keyboard.D && this.character.bottles > 0 && this.cooldown > 2 && !this.character.isHurt()) {
             let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, true);
+            bottle.world = this;
             this.throwableObjects.push(bottle);
             this.character.bottles -= 10;
             this.statusBarBottle.setPercentage(this.character.bottles);
@@ -143,6 +167,8 @@ class World {
     }
 
     checkDamage() {
+        if (this.gameOver) return;
+
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.isAboveGround() && !this.character.isHurt()) {
                 this.character.hit(5);
@@ -156,9 +182,9 @@ class World {
         });
 
         if (this.character.isDead()) {
-
+            this.gameOver = true;
+            document.getElementById('game-over').hidden = false;
         }
-
     }
 
     draw() {
@@ -188,9 +214,11 @@ class World {
 
         // Draw() wird immer wieder aufgerufen
         let self = this;
-        requestAnimationFrame(function () {
-            self.draw();
-        });
+        if (!this.gameOver) {
+            requestAnimationFrame(function () {
+                self.draw();
+            });
+        }
     }
 
     addObjectsToMap(objects) {
@@ -224,4 +252,3 @@ class World {
         this.ctx.restore();
     }
 }
-

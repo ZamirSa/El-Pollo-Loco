@@ -51,6 +51,7 @@ class ThrowableObject extends MovableObject {
 
 
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (this.otherDirection == false && this.fall == true) {
                 this.x += 10;
             } else if (this.otherDirection == true && this.fall == true) {
@@ -63,6 +64,7 @@ class ThrowableObject extends MovableObject {
 
     animate() {
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (this.enemyHit == true) {
                 this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
                 this.speedY = 0;
@@ -74,6 +76,7 @@ class ThrowableObject extends MovableObject {
 
 
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (!this.soundPlayed && this.enemyHit == false) {
                 this.throwSound.play()
                 this.soundPlayed = true;

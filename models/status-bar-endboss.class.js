@@ -21,6 +21,7 @@ class StatusBarEndboss extends DrawableObject {
         this.setPercentage(100);
 
         setInterval(() => {
+             if (this.world && this.world.gameOver) return;
              if (this.alert == true) {
                 this.x = 440;
             } else {

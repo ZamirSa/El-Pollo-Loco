@@ -32,6 +32,75 @@ canvas {
     background-size: cover;
 }
 
+.game-container {
+    position: relative;
+    width: 720px;
+    max-width: 100%;
+}
+
+.game-over {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.72);
+    color: #fff;
+    text-align: center;
+}
+
+.game-over[hidden] {
+    display: none;
+}
+
+.game-over img {
+    width: 700px;
+}
+
+.game-over button {
+    padding: 10px 20px;
+    border: 0;
+    border-radius: 6px;
+    background: #f4c542;
+    color: #222;
+    cursor: pointer;
+    font: inherit;
+    font-size: 24px;
+}
+
+.controls {
+    text-align: center;
+}
+
+.controls h2 {
+    margin-bottom: 8px;
+    font-size: 32px;
+}
+
+.controls ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px 24px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 20px;
+}
+
+.controls kbd {
+    display: inline-block;
+    min-width: 24px;
+    padding: 3px 7px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.75);
+    font: inherit;
+    text-align: center;
+}
+
 
 @media only screen and (max-width: 720px) {
     canvas {

@@ -34,8 +34,26 @@
     <h1>El Pollo Loco</h1>
 
 
-    <canvas id="canvas" width="720" height="480" onclick="startGame()">
-    </canvas>
+    <div class="game-container">
+        <canvas id="canvas" width="720" height="480" onclick="startGame()">
+        </canvas>
+        <div id="game-over" class="game-over" role="dialog" aria-labelledby="game-over-heading" hidden>
+            <img src="../img/You won, you lost/You lost.png" alt="You lost">
+            <button type="button" onclick="restartGame()">Restart round</button>
+            <button type="button" onclick="goToMenu()">Main menu</button>
+        </div>
+    </div>
+
+    <section class="controls" aria-labelledby="controls-heading">
+        <h2 id="controls-heading">Controls</h2>
+        <ul>
+            <li><kbd>←</kbd> Move left</li>
+            <li><kbd>→</kbd> Move right</li>
+            <li><kbd>Space</kbd> Jump</li>
+            <li><kbd>D</kbd> Throw</li>
+        </ul>
+    </section>
+
 
 
 </body>

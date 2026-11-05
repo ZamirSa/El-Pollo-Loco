@@ -8,6 +8,7 @@ class MovableObject extends DrawableObject {
     bottles = 0;
     deadSound;
     soundPlayed = false;
+    world;
 
     lastHit = 0;
     lastCoinCollect = 0;
@@ -22,6 +23,7 @@ class MovableObject extends DrawableObject {
 
     applyGravity() {
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;

@@ -31,6 +31,7 @@ class ChickenSmall extends MovableObject {
 
     animate() {
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (!this.isDead() && this.otherDirection == false) {
                 this.moveLeft();
             } else if (!this.isDead() && this.otherDirection == true) {
@@ -39,6 +40,7 @@ class ChickenSmall extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (!this.isDead()) {
                 this.playAnimation(this.IMAGES_WALKING);
             } else {
@@ -48,6 +50,7 @@ class ChickenSmall extends MovableObject {
 
 
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (this.isDead() && !this.soundPlayed) {
                 this.deadSound.play()
                 this.soundPlayed = true;

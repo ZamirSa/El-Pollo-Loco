@@ -30,10 +30,12 @@ class Coins extends MovableObject {
 
     animate() {
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             this.playAnimation(this.IMAGES_COINS);
         }, 250);
 
         setInterval(() => {
+            if (this.world && this.world.gameOver) return;
             if (this.isDead() && !this.soundPlayed) {
                 this.collectSound.play()
                 this.soundPlayed = true;

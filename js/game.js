@@ -16,6 +16,12 @@ function startGame() {
     }
 }
 
+function restartGame() {
+    if (!world || !world.gameOver) return;
+    keyboard = new Keyboard();
+    world = new World(canvas, keyboard, true);
+}
+
 window.addEventListener('keydown', (e) => {
     if (e.key == "ArrowRight") {
         keyboard.RIGHT = true;
