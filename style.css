@@ -70,6 +70,15 @@ canvas {
     font-size: 24px;
 }
 
+.game-over button:hover {
+    background: #e0b12f;
+}
+
+.game-over div{
+        display: flex;
+        gap: 20px;
+    }
+
 .controls {
     text-align: center;
 }
