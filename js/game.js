@@ -13,6 +13,10 @@ function startGame() {
     if (gameStarted == false) {
         world = new World(canvas, keyboard);
         gameStarted = true;
+        document.getElementById('start-screen').classList.add('display-none');
+    } else if (world && world.gameOver) {
+        restartGame();
+        document.getElementById('start-screen').classList.add('display-none');
     }
 }
 
@@ -21,6 +25,15 @@ function restartGame() {
     keyboard = new Keyboard();
     world = new World(canvas, keyboard, true);
 }
+
+function goToMenu() {
+    if (world) {
+        world.gameOver = true;
+        document.getElementById('start-screen').classList.remove('display-none');
+    }
+}
+
+
 
 window.addEventListener('keydown', (e) => {
     if (e.key == "ArrowRight") {

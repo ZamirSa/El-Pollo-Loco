@@ -27,9 +27,24 @@ canvas {
     display: block;
     width: 720px;
     height: 480px;
-    background-image: url('./img/9_intro_outro_screens/start/startscreen_1.png');
     background-position: center;
     background-size: cover;
+}
+
+.start-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.72);
+}
+
+.start-screen img {
+    width: 720px;
+    height: 480px;
+    object-fit: cover;
+    cursor: pointer;
 }
 
 .game-container {
@@ -38,7 +53,8 @@ canvas {
     max-width: 100%;
 }
 
-.game-over {
+.game-over,
+.game-won {
     position: absolute;
     inset: 0;
     display: flex;
@@ -51,7 +67,8 @@ canvas {
     text-align: center;
 }
 
-.game-over[hidden] {
+.game-over[hidden],
+.game-won[hidden] {
     display: none;
 }
 
@@ -59,7 +76,12 @@ canvas {
     width: 700px;
 }
 
-.game-over button {
+.game-won img {
+    width: 400px;
+}
+
+.game-over button,
+.game-won button {
     padding: 10px 20px;
     border: 0;
     border-radius: 6px;
@@ -70,14 +92,16 @@ canvas {
     font-size: 24px;
 }
 
-.game-over button:hover {
+.game-over button:hover,
+.game-won button:hover {
     background: #e0b12f;
 }
 
-.game-over div{
-        display: flex;
-        gap: 20px;
-    }
+.game-over div,
+.game-won div {
+    display: flex;
+    gap: 20px;
+}
 
 .controls {
     text-align: center;
@@ -110,6 +134,9 @@ canvas {
     text-align: center;
 }
 
+.display-none {
+    display: none;
+}
 
 @media only screen and (max-width: 720px) {
     canvas {

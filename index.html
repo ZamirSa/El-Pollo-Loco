@@ -36,14 +36,24 @@
 
 
     <div class="game-container">
-        <canvas id="canvas" width="720" height="480" onclick="startGame()">
+        <canvas id="canvas" width="720" height="480">
         </canvas>
         <div id="game-over" class="game-over" role="dialog" aria-labelledby="game-over-heading" hidden>
             <img src="../img/You won, you lost/You lost.png" alt="You lost">
             <div>
-            <button type="button" onclick="restartGame()">Restart round</button>
-            <button type="button" onclick="goToMenu()">Main menu</button>
+                <button type="button" onclick="restartGame()">Restart round</button>
+                <button type="button" onclick="goToMenu()">Main menu</button>
             </div>
+        </div>
+        <div id="game-won" class="game-won" role="dialog" aria-labelledby="game-won-heading" hidden>
+            <img src="../img/You won, you lost/You won A.png" alt="You won">
+            <div>
+                <button type="button" onclick="restartGame()">Restart round</button>
+                <button type="button" onclick="goToMenu()">Main menu</button>
+            </div>
+        </div>
+        <div id="start-screen" class="start-screen" onclick="startGame()">
+            <img src='./img/9_intro_outro_screens/start/startscreen_1.png' alt='Start screen' id='start-screen'>
         </div>
     </div>
 

@@ -31,6 +31,7 @@ class World {
         this.setWorld();
         this.run();
         document.getElementById('game-over').hidden = true;
+        document.getElementById('game-won').hidden = true;
     }
 
     setWorld() {
@@ -184,6 +185,11 @@ class World {
         if (this.character.isDead()) {
             this.gameOver = true;
             document.getElementById('game-over').hidden = false;
+        } else if (this.level.enemies.at(-1).isDead()) {
+            setTimeout(() => {
+                this.gameOver = true;
+                document.getElementById('game-won').hidden = false;
+            }, 300);
         }
     }
 
