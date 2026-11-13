@@ -19,7 +19,7 @@ class Coins extends MovableObject {
     constructor() {
         super().loadImage('../img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES_COINS);
-        this.collectSound = new Audio(this.AUDIO_COLLECT);
+        this.collectSound = createGameAudio(this.AUDIO_COLLECT);
         this.collectSound.volume = 0.5;
 
         this.x = 200 + Math.random() * 2000;

@@ -65,7 +65,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_DEAD);
-        this.hurtSound = new Audio(this.AUDIO_HURT);
+        this.hurtSound = createGameAudio(this.AUDIO_HURT);
         this.hurtSound.volume = 0.5;
         this.x = 2500;
         this.speed = 2;

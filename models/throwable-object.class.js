@@ -49,9 +49,9 @@ class ThrowableObject extends MovableObject {
 
     /** Creates and configures the bottle sounds. */
     initializeSounds() {
-        this.throwSound = new Audio(this.AUDIO_THROW);
+        this.throwSound = createGameAudio(this.AUDIO_THROW);
         this.throwSound.volume = 0.2;
-        this.splashSound = new Audio(this.AUDIO_SPLASH);
+        this.splashSound = createGameAudio(this.AUDIO_SPLASH);
         this.splashSound.volume = 0.5;
     }
 

@@ -109,9 +109,9 @@ class Character extends MovableObject {
 
     /** Creates and configures the character's sound effects. */
     initializeSounds() {
-        this.hurtSound = new Audio(this.AUDIO_HURT);
+        this.hurtSound = createGameAudio(this.AUDIO_HURT);
         this.hurtSound.volume = 0.5;
-        this.jumpSound = new Audio(this.AUDIO_JUMP);
+        this.jumpSound = createGameAudio(this.AUDIO_JUMP);
         this.jumpSound.volume = 0.5;
     }
 

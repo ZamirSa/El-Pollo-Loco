@@ -4,11 +4,13 @@ let startscreen;
 let gameStarted = false;
 let keyboard = new Keyboard();
 let backgroundMusic;
+let gameAudio = [];
+let soundMuted = false;
 
-/** Initializes the game canvas and music controls. */
+/** Initializes the game canvas and audio controls. */
 function init() {
     canvas = document.getElementById('canvas');
-    backgroundMusic = new Audio('./audio/mexican-mariachi.mp3');
+    backgroundMusic = createGameAudio('./audio/mexican-mariachi.mp3');
     backgroundMusic.loop = true;
     backgroundMusic.volume = 0.3;
 
@@ -19,6 +21,18 @@ function init() {
         document.getElementById('music-volume-value').textContent = `${Math.round(volume * 100)}%`;
     });
     //world = new World(canvas, keyboard);
+}
+
+/**
+ * Creates and registers an audio element so mute applies to all game sounds.
+ * @param {string|string[]} source The audio source.
+ * @returns {HTMLAudioElement} The registered audio element.
+ */
+function createGameAudio(source) {
+    const audio = new Audio(source);
+    audio.muted = soundMuted;
+    gameAudio.push(audio);
+    return audio;
 }
 
 /** Starts a new game or resumes a completed round. */
@@ -42,12 +56,15 @@ function playMusic() {
     });
 }
 
-/** Toggles background music mute state and updates the control. */
+/** Toggles all game sounds and updates the audio control. */
 function toggleMusic() {
-    backgroundMusic.muted = !backgroundMusic.muted;
+    soundMuted = !soundMuted;
+    gameAudio.forEach((audio) => {
+        audio.muted = soundMuted;
+    });
     const musicToggle = document.getElementById('music-toggle');
-    musicToggle.textContent = backgroundMusic.muted ? 'Unmute music' : 'Mute music';
-    musicToggle.setAttribute('aria-pressed', backgroundMusic.muted);
+    musicToggle.textContent = soundMuted ? 'Unmute' : 'Mute';
+    musicToggle.setAttribute('aria-pressed', soundMuted);
 }
 
 /** Restarts the current round when the game is over. */
