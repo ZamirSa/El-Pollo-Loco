@@ -11,6 +11,7 @@ class StatusBarEndboss extends DrawableObject {
 
     percentage = 100;
 
+    /** Initializes the end boss status bar and its position update. */
     constructor() {
         super(); 
         this.loadImages(this.IMAGES);
@@ -22,6 +23,7 @@ class StatusBarEndboss extends DrawableObject {
         this.startPositionInterval();
     }
 
+    /** Starts tracking the end boss status bar position. */
     startPositionInterval() {
         setInterval(() => {
             if (this.world && this.world.gameOver) return;
@@ -34,12 +36,17 @@ class StatusBarEndboss extends DrawableObject {
     }
 
     // setPercentage(50);
+    /**
+     * Updates the displayed end boss health percentage.
+     * @param {number} percentage The current health percentage.
+     */
     setPercentage(percentage) {
         this.percentage = percentage; // => 0 ... 5
         let path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
     }
 
+    /** Resolves the image index for the current end boss health. */
     resolveImageIndex() {
         if (this.percentage == 100) return 5;
         if (this.percentage > 80) return 4;

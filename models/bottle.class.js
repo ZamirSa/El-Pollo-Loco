@@ -13,6 +13,7 @@ class Bottle extends MovableObject {
         '../audio/bottle.mp3'
     ];
 
+    /** Creates a collectible bottle and starts its sound animation. */
     constructor() {
         super().loadImage('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.collectSound = new Audio(this.AUDIO_COLLECT);
@@ -24,6 +25,7 @@ class Bottle extends MovableObject {
 
     }
 
+    /** Starts the bottle's collection sound check. */
     animate() {
         setInterval(() => {
             if (this.isDead() && !this.soundPlayed) {

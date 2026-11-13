@@ -57,6 +57,7 @@ class Endboss extends MovableObject {
         'audio/endboss-hurt.mp3'
     ];
 
+    /** Initializes the end boss assets, sound, position, and animation loops. */
     constructor() {
         super().loadImage(this.IMAGES_ALERT[0]);
         this.loadImages(this.IMAGES_ALERT);
@@ -72,12 +73,14 @@ class Endboss extends MovableObject {
 
     }
 
+    /** Starts the end boss animation, movement, and sound intervals. */
     animate() {
         setInterval(() => this.updateAnimation(), 150);
         setInterval(() => this.updateMovement(), 1000 / 60);
         setInterval(() => this.playHurtSound(), 150);
     }
 
+    /** Selects the end boss animation for its current state. */
     updateAnimation() {
         if (this.world && this.world.gameOver) return;
         if (this.isHurt() && !this.isDead()) this.playAnimation(this.IMAGES_HURT);
@@ -87,12 +90,14 @@ class Endboss extends MovableObject {
         else this.playAnimation(this.IMAGES_ALERT);
     }
 
+    /** Moves the alerted end boss toward its current direction. */
     updateMovement() {
         if (this.world && this.world.gameOver) return;
         if (!this.isDead() && this.alerted == true && this.attack == false && this.otherDirection == false) this.moveLeft();
         else if (!this.isDead() && this.alerted == true && this.attack == false && this.otherDirection == true) this.moveRight();
     }
 
+    /** Plays the end boss hurt sound when appropriate. */
     playHurtSound() {
         if (this.world && this.world.gameOver) return;
         if (this.isHurt() && !this.soundPlayed) this.hurtSound.play();

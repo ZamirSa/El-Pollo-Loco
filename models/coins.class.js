@@ -15,6 +15,7 @@ class Coins extends MovableObject {
         '../audio/coin.mp3'
     ]
 
+    /** Creates a collectible coin and starts its animation loops. */
     constructor() {
         super().loadImage('../img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES_COINS);
@@ -28,6 +29,7 @@ class Coins extends MovableObject {
     }
 
 
+    /** Starts the coin animation and collection sound intervals. */
     animate() {
         setInterval(() => {
             if (this.world && this.world.gameOver) return;

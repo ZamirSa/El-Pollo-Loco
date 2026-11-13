@@ -5,6 +5,7 @@ let gameStarted = false;
 let keyboard = new Keyboard();
 let backgroundMusic;
 
+/** Initializes the game canvas and music controls. */
 function init() {
     canvas = document.getElementById('canvas');
     backgroundMusic = new Audio('./audio/mexican-mariachi.mp3');
@@ -20,6 +21,7 @@ function init() {
     //world = new World(canvas, keyboard);
 }
 
+/** Starts a new game or resumes a completed round. */
 function startGame() {
     if (gameStarted == false) {
         world = new World(canvas, keyboard);
@@ -33,12 +35,14 @@ function startGame() {
     }
 }
 
+/** Starts the background music and reports playback errors. */
 function playMusic() {
     backgroundMusic.play().catch((error) => {
         console.error('Unable to play background music:', error);
     });
 }
 
+/** Toggles background music mute state and updates the control. */
 function toggleMusic() {
     backgroundMusic.muted = !backgroundMusic.muted;
     const musicToggle = document.getElementById('music-toggle');
@@ -46,12 +50,14 @@ function toggleMusic() {
     musicToggle.setAttribute('aria-pressed', backgroundMusic.muted);
 }
 
+/** Restarts the current round when the game is over. */
 function restartGame() {
     if (!world || !world.gameOver) return;
     keyboard = new Keyboard();
     world = new World(canvas, keyboard, true);
 }
 
+/** Stops the current game and returns to the start screen. */
 function goToMenu() {
     if (world) {
         world.gameOver = true;
@@ -66,6 +72,11 @@ function goToMenu() {
 window.addEventListener('keydown', (e) => updateKeyboard(e, true));
 window.addEventListener('keyup', (e) => updateKeyboard(e, false));
 
+/**
+ * Updates the keyboard state for a supported key.
+ * @param {KeyboardEvent} e The keyboard event.
+ * @param {boolean} isPressed Whether the key is pressed.
+ */
 function updateKeyboard(e, isPressed) {
     if (e.key == "ArrowRight") keyboard.RIGHT = isPressed;
     if (e.key == "ArrowLeft") keyboard.LEFT = isPressed;

@@ -11,6 +11,7 @@ class Chicken extends MovableObject {
     AUDIO_DEAD = [
         '../audio/chicken-dead.mp3']
 
+    /** Creates a chicken and starts its animation loops. */
     constructor() {
         super().loadImage('../img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -21,24 +22,28 @@ class Chicken extends MovableObject {
         this.animate();
     }
 
+    /** Starts the chicken movement, animation, and sound intervals. */
     animate() {
         setInterval(() => this.updateMovement(), 1000 / 60);
         setInterval(() => this.updateAnimation(), 150);
         setInterval(() => this.playDeadSound(), 150);
     }
 
+    /** Moves the chicken according to its direction. */
     updateMovement() {
         if (this.world && this.world.gameOver) return;
         if (!this.isDead() && this.otherDirection == false) this.moveLeft();
         else if (!this.isDead() && this.otherDirection == true) this.moveRight();
     }
 
+    /** Updates the chicken's walking or death image. */
     updateAnimation() {
         if (this.world && this.world.gameOver) return;
         if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
         else this.loadImage('../img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
     }
 
+    /** Plays the chicken's death sound once. */
     playDeadSound() {
         if (this.world && this.world.gameOver) return;
         if (this.isDead() && !this.soundPlayed) {

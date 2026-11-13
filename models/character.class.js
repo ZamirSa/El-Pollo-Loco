@@ -87,6 +87,7 @@ class Character extends MovableObject {
     world;
     idleTime = 0;
 
+    /** Initializes the character's assets, sounds, gravity, and animation loops. */
     constructor() {
         super().loadImage('../img/2_character_pepe/2_walk/W-21.png');
         this.loadCharacterImages();
@@ -95,6 +96,7 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /** Loads all character animation frames into the image cache. */
     loadCharacterImages() {
         this.loadImages(this.IMAGES_IDLE);
         this.loadImages(this.IMAGES_LONG_IDLE);
@@ -105,6 +107,7 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
     }
 
+    /** Creates and configures the character's sound effects. */
     initializeSounds() {
         this.hurtSound = new Audio(this.AUDIO_HURT);
         this.hurtSound.volume = 0.5;
@@ -112,6 +115,7 @@ class Character extends MovableObject {
         this.jumpSound.volume = 0.5;
     }
 
+    /** Starts the character movement and animation intervals. */
     animate() {
         this.startMovementInterval();
         this.startIdleInterval();
@@ -120,12 +124,18 @@ class Character extends MovableObject {
         this.startHurtSoundInterval();
     }
 
+    /** Starts the character movement update interval. */
     startMovementInterval() { setInterval(() => this.updateMovement(), 1000 / 60); }
+    /** Starts the idle animation update interval. */
     startIdleInterval() { setInterval(() => this.updateIdleAnimation(), 1000 / 5); }
+    /** Starts the jump animation update interval. */
     startJumpAnimationInterval() { setInterval(() => this.updateJumpAnimation(), 1000 / 10); }
+    /** Starts the character state animation update interval. */
     startStateAnimationInterval() { setInterval(() => this.updateStateAnimation(), 50); }
+    /** Starts the hurt sound update interval. */
     startHurtSoundInterval() { setInterval(() => this.playHurtSound(), 150); }
 
+    /** Applies movement, jumping, and camera updates from keyboard input. */
     updateMovement() {
         if (this.world && this.world.gameOver) return;
         this.moveRightIfRequested();
@@ -134,6 +144,7 @@ class Character extends MovableObject {
         this.world.camera_x = -this.x + 100;
     }
 
+    /** Moves the character right when movement is allowed. */
     moveRightIfRequested() {
         if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.isDead()) {
             this.moveRight();
@@ -142,6 +153,7 @@ class Character extends MovableObject {
         }
     }
 
+    /** Moves the character left when movement is allowed. */
     moveLeftIfRequested() {
         if (this.world.keyboard.LEFT && this.x > 0 && !this.isDead()) {
             this.moveLeft();
@@ -150,12 +162,14 @@ class Character extends MovableObject {
         }
     }
 
+    /** Jumps when the jump key is pressed and jumping is allowed. */
     jumpIfRequested() {
         if (!this.world.keyboard.SPACE || this.isAboveGround() || this.isHurt() || this.isDead()) return;
         this.jump();
         this.idleTime = 0;
     }
 
+    /** Selects the idle animation based on the character's idle duration. */
     updateIdleAnimation() {
         if (this.world && this.world.gameOver) return;
         if (!this.world.keyboard.RIGHT && this.idleTime < 14 || !this.world.keyboard.LEFT && this.idleTime < 14) {
@@ -164,12 +178,14 @@ class Character extends MovableObject {
         } else this.playAnimation(this.IMAGES_LONG_IDLE);
     }
 
+    /** Selects the rising or falling animation while airborne. */
     updateJumpAnimation() {
         if (this.world && this.world.gameOver) return;
         if (this.isAboveGround() && this.speedY > 0) this.playAnimation(this.IMAGES_JUMPING);
         else if (this.isAboveGround() && this.speedY < 0) this.playAnimation(this.IMAGES_FALLING);
     }
 
+    /** Updates the character animation for its current state. */
     updateStateAnimation() {
         if (this.world && this.world.gameOver) return;
         if (this.isDead()) this.playDeadAnimation();
@@ -177,22 +193,26 @@ class Character extends MovableObject {
         else this.playWalkingAnimation();
     }
 
+    /** Plays the death animation and resets the idle timer. */
     playDeadAnimation() {
         this.playAnimation(this.IMAGES_DEAD);
         this.idleTime = 0;
     }
 
+    /** Plays the hurt animation and resets the idle timer. */
     playHurtAnimation() {
         this.playAnimation(this.IMAGES_HURT);
         this.idleTime = 0;
     }
 
+    /** Plays the walking animation when movement keys are active on the ground. */
     playWalkingAnimation() {
         if (this.world.keyboard.RIGHT && !this.isAboveGround() || this.world.keyboard.LEFT && !this.isAboveGround()) {
             this.playAnimation(this.IMAGES_WALKING);
         }
     }
 
+    /** Plays the hurt sound while the character is hurt. */
     playHurtSound() {
         if (this.world && this.world.gameOver) return;
         if (this.isHurt() && !this.soundPlayed) this.hurtSound.play();
