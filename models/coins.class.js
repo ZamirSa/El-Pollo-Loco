@@ -21,7 +21,7 @@ class Coins extends MovableObject {
         this.collectSound = new Audio(this.AUDIO_COLLECT);
         this.collectSound.volume = 0.5;
 
-        this.x = 200 + Math.random() * 2100;
+        this.x = 200 + Math.random() * 2000;
         this.y = 55 + Math.random() * 300;
 
         this.animate();

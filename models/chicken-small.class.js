@@ -30,34 +30,28 @@ class ChickenSmall extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (!this.isDead() && this.otherDirection == false) {
-                this.moveLeft();
-            } else if (!this.isDead() && this.otherDirection == true) {
-                this.moveRight();
-            }
-        }, 1000 / 60);
-
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (!this.isDead()) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else {
-                this.loadImage('../img/3_enemies_chicken/chicken_small/2_dead/dead.png');
-            }
-        }, 150);
-
-
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (this.isDead() && !this.soundPlayed) {
-                this.deadSound.play()
-                this.soundPlayed = true;
-            }
-        }, 150);
+        setInterval(() => this.updateMovement(), 1000 / 60);
+        setInterval(() => this.updateAnimation(), 150);
+        setInterval(() => this.playDeadSound(), 150);
     }
 
+    updateMovement() {
+        if (this.world && this.world.gameOver) return;
+        if (!this.isDead() && this.otherDirection == false) this.moveLeft();
+        else if (!this.isDead() && this.otherDirection == true) this.moveRight();
+    }
 
+    updateAnimation() {
+        if (this.world && this.world.gameOver) return;
+        if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
+        else this.loadImage('../img/3_enemies_chicken/chicken_small/2_dead/dead.png');
+    }
 
+    playDeadSound() {
+        if (this.world && this.world.gameOver) return;
+        if (this.isDead() && !this.soundPlayed) {
+            this.deadSound.play();
+            this.soundPlayed = true;
+        }
+    }
 }

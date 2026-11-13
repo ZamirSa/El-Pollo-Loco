@@ -28,62 +28,76 @@ class ThrowableObject extends MovableObject {
 
     constructor(x, y, otherDirection) {
         super().loadImage('../img/6_salsa_bottle/salsa_bottle.png');
+        this.loadBottleImages();
+        this.initializeSounds();
+        this.initializePosition(x, y, otherDirection);
+        this.throw();
+        this.animate();
+    }
+
+    loadBottleImages() {
         this.loadImages(this.IMAGES_BOTTLE);
         this.loadImages(this.IMAGES_BOTTLE_SPLASH);
+    }
+
+    initializeSounds() {
         this.throwSound = new Audio(this.AUDIO_THROW);
         this.throwSound.volume = 0.2;
         this.splashSound = new Audio(this.AUDIO_SPLASH);
         this.splashSound.volume = 0.5;
+    }
 
-
+    initializePosition(x, y, otherDirection) {
         this.x = x;
         this.y = y;
         this.otherDirection = otherDirection;
         this.height = 60;
         this.width = 60;
-        this.throw();
-        this.animate();
     }
 
     throw() {
         this.speedY = 30;
         this.applyGravity();
+        setInterval(() => this.updateThrowPosition(), 25);
+    }
 
-
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (this.otherDirection == false && this.fall == true) {
-                this.x += 10;
-            } else if (this.otherDirection == true && this.fall == true) {
-                this.x -= 10;
-            } else {
-                this.x
-            }
-        }, 25);
+    updateThrowPosition() {
+        if (this.world && this.world.gameOver) return;
+        if (this.otherDirection == false && this.fall == true) this.x += 10;
+        else if (this.otherDirection == true && this.fall == true) this.x -= 10;
+        else this.x;
     }
 
     animate() {
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (this.enemyHit == true) {
-                this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
-                this.speedY = 0;
-                this.fall = false;
-            } else {
-                this.playAnimation(this.IMAGES_BOTTLE);
-            }
-        }, 50);
+        setInterval(() => this.updateAnimation(), 50);
+        setInterval(() => this.updateSounds(), 10);
+    }
 
+    updateAnimation() {
+        if (this.world && this.world.gameOver) return;
+        if (this.enemyHit == true) this.animateSplash();
+        else this.playAnimation(this.IMAGES_BOTTLE);
+    }
 
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (!this.soundPlayed && this.enemyHit == false) {
-                this.throwSound.play()
-                this.soundPlayed = true;
-            }  if (!this.splashSoundPlayed && this.enemyHit == true) {
-                this.splashSound.play()
-                this.splashSoundPlayed = true;
-            }
-        }, 10);
+    animateSplash() {
+        this.playAnimation(this.IMAGES_BOTTLE_SPLASH);
+        this.speedY = 0;
+        this.fall = false;
+    }
+
+    updateSounds() {
+        if (this.world && this.world.gameOver) return;
+        if (!this.soundPlayed && this.enemyHit == false) this.playThrowSound();
+        if (!this.splashSoundPlayed && this.enemyHit == true) this.playSplashSound();
+    }
+
+    playThrowSound() {
+        this.throwSound.play();
+        this.soundPlayed = true;
+    }
+
+    playSplashSound() {
+        this.splashSound.play();
+        this.splashSoundPlayed = true;
     }
 }

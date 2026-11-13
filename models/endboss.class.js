@@ -73,36 +73,28 @@ class Endboss extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (this.isHurt() && !this.isDead()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else if (!this.isDead() && this.alerted == true && this.attack == false) {
-                this.playAnimation(this.IMAGES_WALKING);
-            } else if (!this.isDead() && this.attack == true) {
-                this.playAnimation(this.IMAGES_ATTACK);
-            } else if (this.isDead()) {
-                this.playAnimation(this.IMAGES_DEAD);
-            }
-            else {
-                this.playAnimation(this.IMAGES_ALERT);
-            }
-        }, 150);
+        setInterval(() => this.updateAnimation(), 150);
+        setInterval(() => this.updateMovement(), 1000 / 60);
+        setInterval(() => this.playHurtSound(), 150);
+    }
 
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (!this.isDead() && this.alerted == true && this.attack == false && this.otherDirection == false) {
-                this.moveLeft();
-            } else if (!this.isDead() && this.alerted == true && this.attack == false && this.otherDirection == true) {
-                this.moveRight();
-            }
-        }, 1000 / 60);
+    updateAnimation() {
+        if (this.world && this.world.gameOver) return;
+        if (this.isHurt() && !this.isDead()) this.playAnimation(this.IMAGES_HURT);
+        else if (!this.isDead() && this.alerted == true && this.attack == false) this.playAnimation(this.IMAGES_WALKING);
+        else if (!this.isDead() && this.attack == true) this.playAnimation(this.IMAGES_ATTACK);
+        else if (this.isDead()) this.playAnimation(this.IMAGES_DEAD);
+        else this.playAnimation(this.IMAGES_ALERT);
+    }
 
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            if (this.isHurt() && !this.soundPlayed) {
-                this.hurtSound.play()
-            }
-        }, 150);
+    updateMovement() {
+        if (this.world && this.world.gameOver) return;
+        if (!this.isDead() && this.alerted == true && this.attack == false && this.otherDirection == false) this.moveLeft();
+        else if (!this.isDead() && this.alerted == true && this.attack == false && this.otherDirection == true) this.moveRight();
+    }
+
+    playHurtSound() {
+        if (this.world && this.world.gameOver) return;
+        if (this.isHurt() && !this.soundPlayed) this.hurtSound.play();
     }
 }

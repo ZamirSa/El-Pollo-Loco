@@ -63,54 +63,14 @@ function goToMenu() {
 
 
 
-window.addEventListener('keydown', (e) => {
-    if (e.key == "ArrowRight") {
-        keyboard.RIGHT = true;
-    }
+window.addEventListener('keydown', (e) => updateKeyboard(e, true));
+window.addEventListener('keyup', (e) => updateKeyboard(e, false));
 
-    if (e.key == "ArrowLeft") {
-        keyboard.LEFT = true;
-    }
-
-    if (e.key == "ArrowUp") {
-        keyboard.UP = true;
-    }
-
-    if (e.key == "ArrowDown") {
-        keyboard.DOWN = true;
-    }
-
-    if (e.key == " ") {
-        keyboard.SPACE = true;
-    }
-
-    if (e.key == "d") {
-        keyboard.D = true;
-    }
-});
-
-window.addEventListener('keyup', (e) => {
-    if (e.key == "ArrowRight") {
-        keyboard.RIGHT = false;
-    }
-
-    if (e.key == "ArrowLeft") {
-        keyboard.LEFT = false;
-    }
-
-    if (e.key == "ArrowUp") {
-        keyboard.UP = false;
-    }
-
-    if (e.key == "ArrowDown") {
-        keyboard.DOWN = false;
-    }
-
-    if (e.key == " ") {
-        keyboard.SPACE = false;
-    }
-
-    if (e.key == "d") {
-        keyboard.D = false;
-    }
-});
+function updateKeyboard(e, isPressed) {
+    if (e.key == "ArrowRight") keyboard.RIGHT = isPressed;
+    if (e.key == "ArrowLeft") keyboard.LEFT = isPressed;
+    if (e.key == "ArrowUp") keyboard.UP = isPressed;
+    if (e.key == "ArrowDown") keyboard.DOWN = isPressed;
+    if (e.key == " ") keyboard.SPACE = isPressed;
+    if (e.key == "d") keyboard.D = isPressed;
+}

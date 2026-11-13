@@ -1,77 +1,31 @@
 function createLevel1() {
-    return new Level(
-        [
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new Chicken(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new ChickenSmall(),
-            new Endboss()
-        ],
-        [
-            new Cloud()
-        ],
-        [
-            new BackgroundObject('../img/5_background/layers/air.png', -720),
-            new BackgroundObject('../img/5_background/layers/3_third_layer/2.png', -720),
-            new BackgroundObject('../img/5_background/layers/2_second_layer/2.png', -720),
-            new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', -720),
+    return new Level(createEnemies(), [new Cloud()], createBackgroundObjects(), createCoins(), createBottles());
+}
 
-            new BackgroundObject('../img/5_background/layers/air.png', 0),
-            new BackgroundObject('../img/5_background/layers/3_third_layer/1.png', 0),
-            new BackgroundObject('../img/5_background/layers/2_second_layer/1.png', 0),
-            new BackgroundObject('../img/5_background/layers/1_first_layer/1.png', 0),
+function createEnemies() {
+    return [...Array.from({ length: 10 }, () => new Chicken()),
+        ...Array.from({ length: 10 }, () => new ChickenSmall()), new Endboss()];
+}
 
-            new BackgroundObject('../img/5_background/layers/air.png', 720),
-            new BackgroundObject('../img/5_background/layers/3_third_layer/2.png', 720),
-            new BackgroundObject('../img/5_background/layers/2_second_layer/2.png', 720),
-            new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', 720),
+function createBackgroundObjects() {
+    const objects = [];
+    for (let tile = -1; tile < 4; tile++) addBackgroundTile(objects, tile);
+    return objects;
+}
 
-            new BackgroundObject('../img/5_background/layers/air.png', 720 * 2),
-            new BackgroundObject('../img/5_background/layers/3_third_layer/1.png', 720 * 2),
-            new BackgroundObject('../img/5_background/layers/2_second_layer/1.png', 720 * 2),
-            new BackgroundObject('../img/5_background/layers/1_first_layer/1.png', 720 * 2),
+function addBackgroundTile(objects, tile) {
+    const variant = tile % 2 === 0 ? 1 : 2;
+    const x = tile * 720;
+    objects.push(new BackgroundObject('../img/5_background/layers/air.png', x));
+    objects.push(new BackgroundObject(`../img/5_background/layers/3_third_layer/${variant}.png`, x));
+    objects.push(new BackgroundObject(`../img/5_background/layers/2_second_layer/${variant}.png`, x));
+    objects.push(new BackgroundObject(`../img/5_background/layers/1_first_layer/${variant}.png`, x));
+}
 
-            new BackgroundObject('../img/5_background/layers/air.png', 720 * 3),
-            new BackgroundObject('../img/5_background/layers/3_third_layer/2.png', 720 * 3),
-            new BackgroundObject('../img/5_background/layers/2_second_layer/2.png', 720 * 3),
-            new BackgroundObject('../img/5_background/layers/1_first_layer/2.png', 720 * 3)
-        ],
-        [
-            new Coins(),
-            new Coins(),
-            new Coins(),
-            new Coins(),
-            new Coins(),
-        ],
-        [
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle(),
-            new Bottle()
-        ]
-    );
+function createCoins() {
+    return Array.from({ length: 5 }, () => new Coins());
+}
+
+function createBottles() {
+    return Array.from({ length: 12 }, () => new Bottle());
 }

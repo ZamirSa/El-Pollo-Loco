@@ -18,7 +18,7 @@ class Bottle extends MovableObject {
         this.collectSound = new Audio(this.AUDIO_COLLECT);
         this.collectSound.volume = 0.3;
 
-        this.x = 200 + Math.random() * 2100;
+        this.x = 200 + Math.random() * 2000;
 
         this.animate();
 
