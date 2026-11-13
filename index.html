@@ -32,12 +32,27 @@
 
 <body onload="init();">
 
+    <div class="rotate-device-message" role="status" aria-live="polite">
+        <span aria-hidden="true">↻</span>
+        <p>Please turn your phone to landscape mode to play.</p>
+    </div>
+
     <h1>El Pollo Loco</h1>
 
 
     <div class="game-container">
         <canvas id="canvas" width="720" height="480">
         </canvas>
+        <div class="mobile-controls" aria-label="Touch game controls">
+            <div class="mobile-movement-controls">
+                <button type="button" data-key="LEFT" aria-label="Move left">←</button>
+                <button type="button" data-key="RIGHT" aria-label="Move right">→</button>
+            </div>
+            <div class="mobile-action-controls">
+                <button type="button" data-key="SPACE" aria-label="Jump">Jump</button>
+                <button type="button" data-key="D" aria-label="Throw bottle">Throw</button>
+            </div>
+        </div>
         <div id="game-over" class="game-over" role="dialog" aria-labelledby="game-over-heading" hidden>
             <img src="../img/You won, you lost/You lost.png" alt="You lost">
             <div>
