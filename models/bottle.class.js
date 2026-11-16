@@ -10,12 +10,12 @@ class Bottle extends MovableObject {
     };
 
     AUDIO_COLLECT = [
-        '../audio/bottle.mp3'
+        './audio/bottle.mp3'
     ];
 
     /** Creates a collectible bottle and starts its sound animation. */
     constructor() {
-        super().loadImage('../img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
+        super().loadImage('./img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
         this.collectSound = createGameAudio(this.AUDIO_COLLECT);
         this.collectSound.volume = 0.3;
 

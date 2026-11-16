@@ -8,16 +8,16 @@ class Coins extends MovableObject {
         right: 40
     };
     IMAGES_COINS = [
-        '../img/8_coin/coin_1.png',
-        '../img/8_coin/coin_2.png'
+        './img/8_coin/coin_1.png',
+        './img/8_coin/coin_2.png'
     ]
     AUDIO_COLLECT = [
-        '../audio/coin.mp3'
+        './audio/coin.mp3'
     ]
 
     /** Creates a collectible coin and starts its animation loops. */
     constructor() {
-        super().loadImage('../img/8_coin/coin_1.png');
+        super().loadImage('./img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES_COINS);
         this.collectSound = createGameAudio(this.AUDIO_COLLECT);
         this.collectSound.volume = 0.5;

@@ -9,18 +9,18 @@ class ChickenSmall extends MovableObject {
         right: 5
     };
     IMAGES_WALKING = [
-        '../img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
-        '../img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
-        '../img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
+        './img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+        './img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+        './img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
     ]
 
     AUDIO_DEAD = [
-        '../audio/chicken-small-dead.wav'
+        './audio/chicken-small-dead.wav'
     ]
 
     /** Creates a small chicken and starts its animation loops. */
     constructor() {
-        super().loadImage('../img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
+        super().loadImage('./img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
         this.deadSound = createGameAudio(this.AUDIO_DEAD);
         this.deadSound.volume = 0.5;
@@ -48,7 +48,7 @@ class ChickenSmall extends MovableObject {
     updateAnimation() {
         if (this.world && this.world.gameOver) return;
         if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
-        else this.loadImage('../img/3_enemies_chicken/chicken_small/2_dead/dead.png');
+        else this.loadImage('./img/3_enemies_chicken/chicken_small/2_dead/dead.png');
     }
 
     /** Plays the small chicken's death sound once. */
