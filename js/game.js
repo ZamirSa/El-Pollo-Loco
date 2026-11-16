@@ -20,6 +20,13 @@ function init() {
 
 /** Connects the audio buttons and music volume slider. */
 function setupAudioControls() {
+    const audioControlsToggle = document.getElementById('audio-controls-toggle');
+    const audioControlsPanel = document.getElementById('audio-controls-panel');
+    audioControlsToggle.addEventListener('click', () => {
+        const isExpanded = audioControlsToggle.getAttribute('aria-expanded') === 'true';
+        audioControlsToggle.setAttribute('aria-expanded', !isExpanded);
+        audioControlsPanel.classList.toggle('is-open', !isExpanded);
+    });
     document.getElementById('music-toggle').addEventListener('click', toggleMusic);
     document.getElementById('music-volume').addEventListener('input', (event) => {
         const volume = Number(event.target.value);

@@ -15,7 +15,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     gap: clamp(8px, 1.5vh, 18px);
     min-height: 100vh;
     min-height: 100svh;
@@ -194,6 +194,14 @@ canvas {
     font-size: 20px;
 }
 
+.audio-controls-toggle {
+    display: none;
+}
+
+.audio-controls-panel {
+    display: contents;
+}
+
 .audio-controls button {
     padding: 6px 12px;
     border: 0;
@@ -240,14 +248,48 @@ canvas {
         pointer-events: none;
     }
 
+    .mobile-controls button {
+        min-width: clamp(68px, 7vw, 88px);
+        min-height: clamp(68px, 7vw, 88px);
+        font-size: clamp(24px, 2.5vw, 30px);
+    }
+
     h1 {
         display: none;
     }
 
     .audio-controls {
-        gap: 8px;
+        position: fixed;
+        z-index: 2;
+        top: max(8px, env(safe-area-inset-top));
+        right: max(8px, env(safe-area-inset-right));
+        display: block;
         margin: 0;
-        font-size: 18px;
+        font-size: 16px;
+    }
+
+    .audio-controls-toggle {
+        display: inline-flex;
+    }
+
+    .audio-controls-panel {
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        min-width: max-content;
+        padding: 8px 10px;
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.75);
+        color: #fff;
+    }
+
+    .audio-controls-panel.is-open {
+        display: flex;
     }
 
     .controls h2 {
@@ -275,11 +317,6 @@ canvas {
         width: min(720px, 100%, calc((100svh - 120px) * 1.5));
     }
 
-    .audio-controls {
-        gap: 6px;
-        margin: 0;
-        font-size: 16px;
-    }
 }
 
 @media (orientation: portrait) and (pointer: coarse),
@@ -330,24 +367,11 @@ canvas {
     }
 
     .game-container {
-        width: 100%;
-        height: 100%;
-        max-width: none;
-        aspect-ratio: auto;
-    }
-
-    .audio-controls {
-        position: fixed;
-        z-index: 2;
-        top: max(8px, env(safe-area-inset-top));
-        right: max(8px, env(safe-area-inset-right));
-        gap: 6px;
-        margin: 0;
-        padding: 6px 10px;
-        border-radius: 8px;
-        background: rgba(0, 0, 0, 0.55);
-        color: #fff;
-        font-size: 16px;
+        width: min(100vw, 1620px, calc(100svh * 1.5));
+        height: auto;
+        max-width: 1620px;
+        max-height: 1080px;
+        aspect-ratio: 3 / 2;
     }
 
     .mobile-controls {

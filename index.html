@@ -73,10 +73,13 @@
     </div>
 
     <section class="audio-controls" aria-label="Audio controls">
-        <button id="music-toggle" type="button" aria-pressed="false">Mute</button>
-        <label for="music-volume">Music volume</label>
-        <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.3">
-        <output id="music-volume-value" for="music-volume">30%</output>
+        <button id="audio-controls-toggle" class="audio-controls-toggle" type="button" aria-expanded="false" aria-controls="audio-controls-panel">Audio</button>
+        <div id="audio-controls-panel" class="audio-controls-panel">
+            <button id="music-toggle" type="button" aria-pressed="false">Mute</button>
+            <label for="music-volume">Music volume</label>
+            <input id="music-volume" type="range" min="0" max="1" step="0.01" value="0.3">
+            <output id="music-volume-value" for="music-volume">30%</output>
+        </div>
     </section>
 
     <section class="controls" aria-labelledby="controls-heading">
