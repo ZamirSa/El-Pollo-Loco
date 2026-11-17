@@ -2,11 +2,18 @@ class Chicken extends MovableObject {
     y = 355;
     height = 70;
     width = 70;
+    offset = {
+        top: 4,
+        bottom: 4,
+        left: 2,
+        right: 2
+    };
     IMAGES_WALKING = [
         './img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
         './img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
         './img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
+    IMAGES_DEAD = ['./img/3_enemies_chicken/chicken_normal/2_dead/dead.png'];
 
     AUDIO_DEAD = [
         './audio/chicken-dead.mp3']
@@ -14,7 +21,7 @@ class Chicken extends MovableObject {
     /** Creates a chicken and starts its animation loops. */
     constructor() {
         super().loadImage('./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
-        this.loadImages(this.IMAGES_WALKING);
+        this.loadImages([...this.IMAGES_WALKING, ...this.IMAGES_DEAD]);
         this.deadSound = createGameAudio(this.AUDIO_DEAD);
         this.deadSound.volume = 0.5;
         this.x = 300 + Math.random() * 2100; // Zahl zwischen 200 und 700
@@ -40,7 +47,13 @@ class Chicken extends MovableObject {
     updateAnimation() {
         if (this.world && this.world.gameOver) return;
         if (!this.isDead()) this.playAnimation(this.IMAGES_WALKING);
-        else this.loadImage('./img/3_enemies_chicken/chicken_normal/2_dead/dead.png');
+        else this.img = this.imageCache[this.IMAGES_DEAD[0]];
+    }
+
+    /** Shows the death image as soon as the chicken is defeated. */
+    hit(damage) {
+        super.hit(damage);
+        if (this.isDead()) this.img = this.imageCache[this.IMAGES_DEAD[0]];
     }
 
     /** Plays the chicken's death sound once. */

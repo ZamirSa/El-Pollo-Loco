@@ -92,7 +92,8 @@ class World {
      * @param {boolean} direction Whether the character faces left.
      */
     throwBottle(direction) {
-        let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, direction);
+        const bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, direction);
+        if (direction) bottle.x = this.character.x + this.character.width - 100 - bottle.width;
         bottle.world = this;
         this.throwableObjects.push(bottle);
         this.character.bottles -= 10;
@@ -171,11 +172,11 @@ class World {
      */
     isStompingEnemy(enemy) {
         const characterBottom = this.character.y + this.character.height - this.character.offset.bottom;
+        const previousCharacterBottom = this.character.previousY + this.character.height - this.character.offset.bottom;
         const enemyTop = enemy.y + enemy.offset.top;
-        const overlap = characterBottom - enemyTop;
         const isDescending = this.character.speedY < 0 || this.character.previousY < this.character.y;
-        return this.character.isColliding(enemy) && enemy.energy > 0 && isDescending
-            && overlap >= 0 && overlap <= 30;
+        const crossedEnemyTop = previousCharacterBottom <= enemyTop && characterBottom >= enemyTop;
+        return this.character.isColliding(enemy) && enemy.energy > 0 && isDescending && crossedEnemyTop;
     }
 
     /** Updates the end boss alert, attack, direction, and health bar. */

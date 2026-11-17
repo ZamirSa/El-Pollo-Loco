@@ -6,9 +6,9 @@ class Endboss extends MovableObject {
     alerted = false;
     attack = false;
     offset = {
-        top: 62,
+        top: 75,
         bottom: 10,
-        left: 15,
+        left: 30,
         right: 8
     };
 
