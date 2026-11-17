@@ -6,13 +6,22 @@ let keyboard = new Keyboard();
 let backgroundMusic;
 let gameAudio = [];
 let soundMuted = false;
+const SOUND_MUTED_STORAGE_KEY = 'elPolloLoco.soundMuted';
+const MUSIC_VOLUME_STORAGE_KEY = 'elPolloLoco.musicVolume';
 
 /** Initializes the game canvas and audio controls. */
 function init() {
     canvas = document.getElementById('canvas');
+    soundMuted = localStorage.getItem(SOUND_MUTED_STORAGE_KEY) === 'true';
+    const savedVolume = localStorage.getItem(MUSIC_VOLUME_STORAGE_KEY);
+    const parsedVolume = Number(savedVolume);
+    const musicVolume = savedVolume !== null && savedVolume.trim() !== ''
+        && Number.isFinite(parsedVolume) && parsedVolume >= 0 && parsedVolume <= 1
+        ? parsedVolume
+        : 0.3;
     backgroundMusic = createGameAudio('./audio/mexican-mariachi.mp3');
     backgroundMusic.loop = true;
-    backgroundMusic.volume = 0.3;
+    backgroundMusic.volume = musicVolume;
     setupAudioControls();
     setupMobileControls();
     //world = new World(canvas, keyboard);
@@ -27,10 +36,15 @@ function setupAudioControls() {
         audioControlsToggle.setAttribute('aria-expanded', !isExpanded);
         audioControlsPanel.classList.toggle('is-open', !isExpanded);
     });
+    const musicVolume = document.getElementById('music-volume');
+    musicVolume.value = backgroundMusic.volume;
+    document.getElementById('music-volume-value').textContent = `${Math.round(backgroundMusic.volume * 100)}%`;
+    updateMusicToggle();
     document.getElementById('music-toggle').addEventListener('click', toggleMusic);
-    document.getElementById('music-volume').addEventListener('input', (event) => {
+    musicVolume.addEventListener('input', (event) => {
         const volume = Number(event.target.value);
         backgroundMusic.volume = volume;
+        localStorage.setItem(MUSIC_VOLUME_STORAGE_KEY, volume);
         document.getElementById('music-volume-value').textContent = `${Math.round(volume * 100)}%`;
     });
 }
@@ -41,6 +55,7 @@ function setupMobileControls() {
         button.addEventListener('pointerdown', handleMobileControlStart);
         button.addEventListener('pointerup', handleMobileControlEnd);
         button.addEventListener('pointercancel', handleMobileControlEnd);
+        button.addEventListener('contextmenu', (event) => event.preventDefault());
     });
     window.addEventListener('blur', resetMobileControls);
 }
@@ -97,10 +112,12 @@ function startGame() {
     if (gameStarted == false) {
         world = new World(canvas, keyboard);
         gameStarted = true;
+        document.querySelector('.game-container').classList.add('is-started');
         document.getElementById('start-screen').classList.add('display-none');
         playMusic();
     } else if (world && world.gameOver) {
         restartGame();
+        document.querySelector('.game-container').classList.add('is-started');
         document.getElementById('start-screen').classList.add('display-none');
         playMusic();
     }
@@ -116,9 +133,15 @@ function playMusic() {
 /** Toggles all game sounds and updates the audio control. */
 function toggleMusic() {
     soundMuted = !soundMuted;
+    localStorage.setItem(SOUND_MUTED_STORAGE_KEY, soundMuted);
     gameAudio.forEach((audio) => {
         audio.muted = soundMuted;
     });
+    updateMusicToggle();
+}
+
+/** Updates the mute button to reflect the current sound state. */
+function updateMusicToggle() {
     const musicToggle = document.getElementById('music-toggle');
     musicToggle.textContent = soundMuted ? 'Unmute' : 'Mute';
     musicToggle.setAttribute('aria-pressed', soundMuted);
@@ -135,6 +158,7 @@ function restartGame() {
 function goToMenu() {
     if (world) {
         world.gameOver = true;
+        document.querySelector('.game-container').classList.remove('is-started');
         document.getElementById('start-screen').classList.remove('display-none');
         backgroundMusic.pause();
         backgroundMusic.currentTime = 0;

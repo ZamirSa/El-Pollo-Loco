@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="icon" type="image/png" href="./img/3_enemies_chicken/chicken_normal/1_walk/3_w.png">
     <title>El Pollo Loco</title>
+    <!-- Game models and level setup -->
     <script src="./models/drawable-object.class.js"></script>
     <script src="./models/movable-object.class.js"></script>
     <script src="./models/character.class.js"></script>
@@ -27,6 +28,7 @@
     <script src="./models/coins.class.js"></script>
     <script src="./models/bottle.class.js"></script>
     <script src="./levels/level1.js"></script>
+    <!-- Game entry point -->
     <script src="./js/game.js"></script>
 </head>
 
@@ -37,12 +39,13 @@
         <p>Please turn your phone to landscape mode to play.</p>
     </div>
 
+    <!-- Game title and play area -->
     <h1>El Pollo Loco</h1>
-
 
     <div class="game-container">
         <canvas id="canvas" width="720" height="480">
         </canvas>
+        <!-- Touch controls -->
         <div class="mobile-controls" aria-label="Touch game controls">
             <div class="mobile-movement-controls">
                 <button type="button" data-key="LEFT" aria-label="Move left">←</button>
@@ -53,6 +56,7 @@
                 <button type="button" data-key="D" aria-label="Throw bottle">Throw</button>
             </div>
         </div>
+        <!-- Game result screens -->
         <div id="game-over" class="game-over" role="dialog" aria-labelledby="game-over-heading" hidden>
             <img src="./img/You won, you lost/You lost.png" alt="You lost">
             <div>
@@ -67,12 +71,14 @@
                 <button type="button" onclick="goToMenu()">Main menu</button>
             </div>
         </div>
+        <!-- Start screen -->
         <div id="start-screen" class="start-screen">
             <img src='./img/9_intro_outro_screens/start/startscreen_1.png' alt='Start screen'>
             <button class="start-prompt" type="button" onclick="startGame()">Press to play</button>
         </div>
     </div>
 
+    <!-- Audio settings -->
     <section class="audio-controls" aria-label="Audio controls">
         <button id="audio-controls-toggle" class="audio-controls-toggle" type="button" aria-expanded="false" aria-controls="audio-controls-panel">Audio</button>
         <div id="audio-controls-panel" class="audio-controls-panel">
@@ -83,6 +89,7 @@
         </div>
     </section>
 
+    <!-- Keyboard instructions -->
     <section class="controls" aria-labelledby="controls-heading">
         <h2 id="controls-heading">Controls</h2>
         <ul>
@@ -93,6 +100,7 @@
         </ul>
     </section>
 
+    <!-- Legal notice link -->
     <footer class="site-footer">
         <a href="./impressum.html">Impressum</a>
     </footer>

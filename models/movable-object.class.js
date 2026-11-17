@@ -23,12 +23,19 @@ class MovableObject extends DrawableObject {
 
     /** Applies gravity to this object over time. */
     applyGravity() {
+        this.previousY = this.y;
         setInterval(() => {
             if (this.world && this.world.gameOver) return;
+            const previousY = this.y;
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
             }
+            if (this instanceof Character && this.y >= 155 && this.speedY < 0) {
+                this.y = 155;
+                this.speedY = 0;
+            }
+            this.previousY = previousY;
         }, 1000 / 25)
     }
 

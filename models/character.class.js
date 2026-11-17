@@ -86,6 +86,8 @@ class Character extends MovableObject {
 
     world;
     idleTime = 0;
+    airAnimation = null;
+    airAnimationFrame = 0;
 
     /** Initializes the character's assets, sounds, gravity, and animation loops. */
     constructor() {
@@ -172,6 +174,7 @@ class Character extends MovableObject {
     /** Selects the idle animation based on the character's idle duration. */
     updateIdleAnimation() {
         if (this.world && this.world.gameOver) return;
+        if (this.isAboveGround()) return;
         if (!this.world.keyboard.RIGHT && this.idleTime < 14 || !this.world.keyboard.LEFT && this.idleTime < 14) {
             this.playAnimation(this.IMAGES_IDLE);
             this.idleTime += 0.2;
@@ -181,8 +184,21 @@ class Character extends MovableObject {
     /** Selects the rising or falling animation while airborne. */
     updateJumpAnimation() {
         if (this.world && this.world.gameOver) return;
-        if (this.isAboveGround() && this.speedY > 0) this.playAnimation(this.IMAGES_JUMPING);
-        else if (this.isAboveGround() && this.speedY < 0) this.playAnimation(this.IMAGES_FALLING);
+        if (!this.isAboveGround()) {
+            this.airAnimation = null;
+            this.airAnimationFrame = 0;
+            return;
+        }
+        const images = this.speedY > 0 ? this.IMAGES_JUMPING
+            : this.speedY < 0 ? this.IMAGES_FALLING
+                : null;
+        if (!images) return;
+        if (this.airAnimation !== images) {
+            this.airAnimation = images;
+            this.airAnimationFrame = 0;
+        }
+        this.img = this.imageCache[images[this.airAnimationFrame]];
+        this.airAnimationFrame = Math.min(this.airAnimationFrame + 1, images.length - 1);
     }
 
     /** Updates the character animation for its current state. */

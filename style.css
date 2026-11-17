@@ -1,3 +1,4 @@
+/* Base typography and page layout */
 @font-face {
     font-family: 'zabars';
     src: url('./fonts/zabars.ttf') format('truetype');
@@ -5,6 +6,10 @@
 
 * {
     box-sizing: border-box;
+}
+
+html {
+    font-size: 18px;
 }
 
 .rotate-device-message {
@@ -44,6 +49,7 @@ canvas {
     background-size: cover;
 }
 
+/* Start screen */
 .start-screen {
     position: absolute;
     inset: 0;
@@ -62,14 +68,14 @@ canvas {
 .start-prompt {
     position: absolute;
     bottom: 8%;
-    padding: 0;
+    padding: 10px 20px;
     border: 0;
-    background: transparent;
-    color: #fff;
+    border-radius: 8px;
+    background: rgba(244, 197, 66, 0.85);
+    color: #222;
     cursor: pointer;
     font: inherit;
     font-size: clamp(24px, 5vw, 40px);
-    text-shadow: 2px 2px 4px #000;
     animation: start-prompt-pulse 1.2s ease-in-out infinite alternate;
 }
 
@@ -89,6 +95,7 @@ canvas {
     aspect-ratio: 3 / 2;
 }
 
+/* Touch controls */
 .mobile-controls {
     display: none;
 }
@@ -113,6 +120,7 @@ canvas {
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none;
 }
 
 .mobile-controls button:active {
@@ -120,6 +128,7 @@ canvas {
     color: #222;
 }
 
+/* Game result overlays */
 .game-over,
 .game-won {
     position: absolute;
@@ -172,6 +181,7 @@ canvas {
     gap: 20px;
 }
 
+/* Instructions and legal page */
 .controls {
     text-align: center;
 }
@@ -204,6 +214,10 @@ canvas {
 
 .impressum-page {
     justify-content: flex-start;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow-y: auto;
 }
 
 .impressum-content {
@@ -212,7 +226,7 @@ canvas {
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.9);
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.6;
 }
 
@@ -222,6 +236,7 @@ canvas {
 }
 
 .impressum-content h1 {
+    display: block;
     font-size: clamp(28px, 6vw, 40px);
 }
 
@@ -245,6 +260,7 @@ canvas {
     display: none;
 }
 
+/* Audio controls */
 .audio-controls {
     display: flex;
     align-items: center;
@@ -281,6 +297,7 @@ canvas {
     accent-color: #e0b12f;
 }
 
+/* Compact and touch-device layout */
 @media only screen and (max-width: 720px), (pointer: coarse) {
     body {
         gap: 10px;
@@ -307,6 +324,11 @@ canvas {
         align-items: flex-end;
         justify-content: space-between;
         pointer-events: none;
+        visibility: hidden;
+    }
+
+    .game-container.is-started .mobile-controls {
+        visibility: visible;
     }
 
     .mobile-controls button {
@@ -324,7 +346,7 @@ canvas {
         padding: 4px 8px;
         border-radius: 6px;
         background: rgba(0, 0, 0, 0.6);
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .site-footer a {
@@ -342,7 +364,7 @@ canvas {
         right: max(8px, env(safe-area-inset-right));
         display: block;
         margin: 0;
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .audio-controls-toggle {
@@ -379,6 +401,7 @@ canvas {
     }
 }
 
+/* Short viewports */
 @media only screen and (max-height: 480px) {
     body {
         gap: 8px;
@@ -396,6 +419,7 @@ canvas {
 
 }
 
+/* Portrait orientation prompt */
 @media (orientation: portrait) and (pointer: coarse),
        (orientation: portrait) and (max-width: 600px) {
     .rotate-device-message {
@@ -426,6 +450,7 @@ canvas {
     }
 }
 
+/* Landscape gameplay */
 @media (orientation: landscape) and (pointer: coarse),
        (orientation: landscape) and (max-width: 900px) {
     body {
@@ -453,5 +478,32 @@ canvas {
         right: max(12px, env(safe-area-inset-right));
         bottom: max(12px, env(safe-area-inset-bottom));
         left: max(12px, env(safe-area-inset-left));
+    }
+}
+
+/* Tablet sizing */
+@media (pointer: coarse) and (min-width: 700px) and (min-height: 600px) {
+    .start-screen img {
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .game-over button,
+    .game-won button {
+        padding: 12px 24px;
+        font-size: 24px;
+    }
+
+    .site-footer {
+        padding: 8px 12px;
+        font-size: 22px;
+    }
+
+    .audio-controls {
+        font-size: 22px;
+    }
+
+    .audio-controls button {
+        padding: 10px 16px;
     }
 }

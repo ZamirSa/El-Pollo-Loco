@@ -96,6 +96,7 @@ class World {
         bottle.world = this;
         this.throwableObjects.push(bottle);
         this.character.bottles -= 10;
+        this.character.idleTime = 0;
         this.statusBarBottle.setPercentage(this.character.bottles);
         this.cooldown = 0;
         this.bottleIndex++;
@@ -159,9 +160,22 @@ class World {
     /** Applies damage to enemies that the character stomps. */
     checkEnemyStomps() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && this.character.isAboveGround() && enemy.energy > 0
-                && this.character.speedY < 0 && this.character.y + this.character.offset.top < enemy.y) enemy.hit(100);
+            if (this.isStompingEnemy(enemy)) enemy.hit(100);
         });
+    }
+
+    /**
+     * Checks whether the character is descending onto an enemy from above.
+     * @param {MovableObject} enemy The enemy to check.
+     * @returns {boolean} Whether the character is stomping the enemy.
+     */
+    isStompingEnemy(enemy) {
+        const characterBottom = this.character.y + this.character.height - this.character.offset.bottom;
+        const enemyTop = enemy.y + enemy.offset.top;
+        const overlap = characterBottom - enemyTop;
+        const isDescending = this.character.speedY < 0 || this.character.previousY < this.character.y;
+        return this.character.isColliding(enemy) && enemy.energy > 0 && isDescending
+            && overlap >= 0 && overlap <= 30;
     }
 
     /** Updates the end boss alert, attack, direction, and health bar. */
@@ -170,7 +184,7 @@ class World {
         this.alertEndboss(endboss);
         this.updateEndbossAttack(endboss);
         this.updateEndbossDirection(endboss);
-        if (endboss.isHurt()) this.statusBarEndboss.setPercentage(endboss.energy / 10);
+        if (endboss.isHurt() || endboss.isDead()) this.statusBarEndboss.setPercentage(endboss.energy / 10);
     }
 
     /**
@@ -250,6 +264,7 @@ class World {
      * @param {MovableObject} enemy The enemy to check.
      */
     damageCharacter(enemy) {
+        if (this.isStompingEnemy(enemy)) return;
         if (!this.character.isColliding(enemy) || !(enemy.energy > 0)
             || this.character.isAboveGround() || this.character.isHurt()) return;
         this.character.hit(5);
