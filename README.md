@@ -14,4 +14,4 @@ A browser-based 2D platform game built with vanilla JavaScript, HTML, and CSS. G
 
 ## Getting Started
 
-No package installation or build step is required. Serve the project folder with a local web server. For example, with Python:
+No package installation or build step is required. Serve the project folder with a local web server. 
