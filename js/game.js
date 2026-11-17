@@ -24,7 +24,19 @@ function init() {
     backgroundMusic.volume = musicVolume;
     setupAudioControls();
     setupMobileControls();
+    setupImpressumDialog();
     //world = new World(canvas, keyboard);
+}
+
+/** Opens the legal notice as a modal overlay. */
+function setupImpressumDialog() {
+    const impressumDialog = document.getElementById('impressum-dialog');
+    document.getElementById('impressum-open').addEventListener('click', () => {
+        impressumDialog.showModal();
+    });
+    document.getElementById('impressum-close').addEventListener('click', () => {
+        impressumDialog.close();
+    });
 }
 
 /** Connects the audio buttons and music volume slider. */
