@@ -12,12 +12,8 @@
     <script src="./models/movable-object.class.js"></script>
     <script src="./models/character.class.js"></script>
     <script src="./models/chicken.class.js"></script>
-    <script src="./models/chicken-small.class.js"></script>
     <script src="./models/throwable-object.class.js"></script>
     <script src="./models/status-bar.class.js"></script>
-    <script src="./models/status-bar-coin.class.js"></script>
-    <script src="./models/status-bar-bottle.class.js"></script>
-    <script src="./models/status-bar-endboss.class.js"></script>
     <script src="./models/cloud.class.js"></script>
     <script src="./models/world.class.js"></script>
     <script src="./models/startscreen.class.js"></script>
@@ -75,6 +71,7 @@
         <div id="start-screen" class="start-screen">
             <img src='./img/9_intro_outro_screens/start/startscreen_1.png' alt='Start screen'>
             <button class="start-prompt" type="button" onclick="startGame()">Press to play</button>
+            <button id="impressum-open-mobile" class="impressum-open start-impressum" type="button" aria-haspopup="dialog">Impressum</button>
         </div>
     </div>
 
@@ -100,9 +97,9 @@
         </ul>
     </section>
 
-    <!-- Legal notice link -->
+    <!-- Desktop legal notice link -->
     <footer class="site-footer">
-        <button id="impressum-open" type="button" aria-haspopup="dialog">Impressum</button>
+        <button id="impressum-open-desktop" class="impressum-open" type="button" aria-haspopup="dialog">Impressum</button>
     </footer>
 
     <dialog id="impressum-dialog" class="impressum-dialog" aria-labelledby="impressum-heading">

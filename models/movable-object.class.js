@@ -24,19 +24,32 @@ class MovableObject extends DrawableObject {
     /** Applies gravity to this object over time. */
     applyGravity() {
         this.previousY = this.y;
-        setInterval(() => {
-            if (this.world && this.world.gameOver) return;
-            const previousY = this.y;
-            if (this.isAboveGround() || this.speedY > 0) {
-                this.y -= this.speedY;
-                this.speedY -= this.acceleration;
-            }
-            if (this instanceof Character && this.y >= 155 && this.speedY < 0) {
-                this.y = 155;
-                this.speedY = 0;
-            }
-            this.previousY = previousY;
-        }, 1000 / 25)
+        setInterval(() => this.updateGravity(), 1000 / 25);
+    }
+
+    /** Updates vertical movement and the previous position for collision checks. */
+    updateGravity() {
+        if (this.world && this.world.gameOver) return;
+        let previousY = this.y;
+        this.applyGravityForce();
+        this.preventCharacterSinking();
+        this.previousY = previousY;
+    }
+
+    /** Applies acceleration while the object is airborne or moving upward. */
+    applyGravityForce() {
+        if (this.isAboveGround() || this.speedY > 0) {
+            this.y -= this.speedY;
+            this.speedY -= this.acceleration;
+        }
+    }
+
+    /** Keeps the character on the ground instead of below its floor level. */
+    preventCharacterSinking() {
+        if (this instanceof Character && this.y >= 155 && this.speedY < 0) {
+            this.y = 155;
+            this.speedY = 0;
+        }
     }
 
     /** Returns whether this object is above the ground. */

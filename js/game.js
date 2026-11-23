@@ -6,33 +6,37 @@ let keyboard = new Keyboard();
 let backgroundMusic;
 let gameAudio = [];
 let soundMuted = false;
-const SOUND_MUTED_STORAGE_KEY = 'elPolloLoco.soundMuted';
-const MUSIC_VOLUME_STORAGE_KEY = 'elPolloLoco.musicVolume';
+let SOUND_MUTED_STORAGE_KEY = 'elPolloLoco.soundMuted';
+let MUSIC_VOLUME_STORAGE_KEY = 'elPolloLoco.musicVolume';
 
 /** Initializes the game canvas and audio controls. */
 function init() {
     canvas = document.getElementById('canvas');
     soundMuted = localStorage.getItem(SOUND_MUTED_STORAGE_KEY) === 'true';
-    const savedVolume = localStorage.getItem(MUSIC_VOLUME_STORAGE_KEY);
-    const parsedVolume = Number(savedVolume);
-    const musicVolume = savedVolume !== null && savedVolume.trim() !== ''
-        && Number.isFinite(parsedVolume) && parsedVolume >= 0 && parsedVolume <= 1
-        ? parsedVolume
-        : 0.3;
     backgroundMusic = createGameAudio('./audio/mexican-mariachi.mp3');
     backgroundMusic.loop = true;
-    backgroundMusic.volume = musicVolume;
+    backgroundMusic.volume = loadMusicVolume();
     setupAudioControls();
     setupMobileControls();
     setupImpressumDialog();
-    //world = new World(canvas, keyboard);
+}
+
+/** Loads a valid saved music volume, or the default volume. */
+function loadMusicVolume() {
+    let savedVolume = localStorage.getItem(MUSIC_VOLUME_STORAGE_KEY);
+    let parsedVolume = Number(savedVolume);
+    let isValidVolume = savedVolume !== null && savedVolume.trim() !== ''
+        && Number.isFinite(parsedVolume) && parsedVolume >= 0 && parsedVolume <= 1;
+    return isValidVolume ? parsedVolume : 0.3;
 }
 
 /** Opens the legal notice as a modal overlay. */
 function setupImpressumDialog() {
-    const impressumDialog = document.getElementById('impressum-dialog');
-    document.getElementById('impressum-open').addEventListener('click', () => {
-        impressumDialog.showModal();
+    let impressumDialog = document.getElementById('impressum-dialog');
+    document.querySelectorAll('.impressum-open').forEach((button) => {
+        button.addEventListener('click', () => {
+            impressumDialog.showModal();
+        });
     });
     document.getElementById('impressum-close').addEventListener('click', () => {
         impressumDialog.close();
@@ -41,24 +45,47 @@ function setupImpressumDialog() {
 
 /** Connects the audio buttons and music volume slider. */
 function setupAudioControls() {
-    const audioControlsToggle = document.getElementById('audio-controls-toggle');
-    const audioControlsPanel = document.getElementById('audio-controls-panel');
+    setupAudioControlsToggle();
+    setupMusicToggle();
+    setupMusicVolumeControl();
+}
+
+/** Connects the audio panel toggle button. */
+function setupAudioControlsToggle() {
+    let audioControlsToggle = document.getElementById('audio-controls-toggle');
+    let audioControlsPanel = document.getElementById('audio-controls-panel');
     audioControlsToggle.addEventListener('click', () => {
-        const isExpanded = audioControlsToggle.getAttribute('aria-expanded') === 'true';
+        let isExpanded = audioControlsToggle.getAttribute('aria-expanded') === 'true';
         audioControlsToggle.setAttribute('aria-expanded', !isExpanded);
         audioControlsPanel.classList.toggle('is-open', !isExpanded);
     });
-    const musicVolume = document.getElementById('music-volume');
-    musicVolume.value = backgroundMusic.volume;
-    document.getElementById('music-volume-value').textContent = `${Math.round(backgroundMusic.volume * 100)}%`;
+}
+
+/** Connects the music mute toggle and initializes its label. */
+function setupMusicToggle() {
     updateMusicToggle();
     document.getElementById('music-toggle').addEventListener('click', toggleMusic);
-    musicVolume.addEventListener('input', (event) => {
-        const volume = Number(event.target.value);
-        backgroundMusic.volume = volume;
-        localStorage.setItem(MUSIC_VOLUME_STORAGE_KEY, volume);
-        document.getElementById('music-volume-value').textContent = `${Math.round(volume * 100)}%`;
-    });
+}
+
+/** Connects the music volume slider and initializes its value. */
+function setupMusicVolumeControl() {
+    let musicVolume = document.getElementById('music-volume');
+    musicVolume.value = backgroundMusic.volume;
+    updateMusicVolumeDisplay(backgroundMusic.volume);
+    musicVolume.addEventListener('input', handleMusicVolumeChange);
+}
+
+/** Applies and saves the music volume selected by the user. */
+function handleMusicVolumeChange(event) {
+    let volume = Number(event.target.value);
+    backgroundMusic.volume = volume;
+    localStorage.setItem(MUSIC_VOLUME_STORAGE_KEY, volume);
+    updateMusicVolumeDisplay(volume);
+}
+
+/** Updates the visible percentage for the music volume slider. */
+function updateMusicVolumeDisplay(volume) {
+    document.getElementById('music-volume-value').textContent = `${Math.round(volume * 100)}%`;
 }
 
 /** Connects touch controls to keyboard state using pointer events. */
@@ -98,12 +125,13 @@ function handleMobileControlEnd(event) {
  */
 function setMobileControlState(button, isPressed) {
     keyboard[button.dataset.key] = isPressed;
+    button.classList.toggle('is-pressed', isPressed);
 }
 
 /** Clears held mobile controls when the window loses focus. */
 function resetMobileControls() {
     document.querySelectorAll('.mobile-controls button').forEach((button) => {
-        keyboard[button.dataset.key] = false;
+        setMobileControlState(button, false);
     });
 }
 
@@ -113,7 +141,7 @@ function resetMobileControls() {
  * @returns {HTMLAudioElement} The registered audio element.
  */
 function createGameAudio(source) {
-    const audio = new Audio(source);
+    let audio = new Audio(source);
     audio.muted = soundMuted;
     gameAudio.push(audio);
     return audio;
@@ -121,18 +149,22 @@ function createGameAudio(source) {
 
 /** Starts a new game or resumes a completed round. */
 function startGame() {
-    if (gameStarted == false) {
+    if (!gameStarted) {
         world = new World(canvas, keyboard);
         gameStarted = true;
-        document.querySelector('.game-container').classList.add('is-started');
-        document.getElementById('start-screen').classList.add('display-none');
-        playMusic();
     } else if (world && world.gameOver) {
         restartGame();
-        document.querySelector('.game-container').classList.add('is-started');
-        document.getElementById('start-screen').classList.add('display-none');
-        playMusic();
+    } else {
+        return;
     }
+    showGameScreen();
+    playMusic();
+}
+
+/** Shows the game and hides the start screen. */
+function showGameScreen() {
+    document.querySelector('.game-container').classList.add('is-started');
+    document.getElementById('start-screen').classList.add('display-none');
 }
 
 /** Starts the background music and reports playback errors. */
@@ -154,7 +186,7 @@ function toggleMusic() {
 
 /** Updates the mute button to reflect the current sound state. */
 function updateMusicToggle() {
-    const musicToggle = document.getElementById('music-toggle');
+    let musicToggle = document.getElementById('music-toggle');
     musicToggle.textContent = soundMuted ? 'Unmute' : 'Mute';
     musicToggle.setAttribute('aria-pressed', soundMuted);
 }
@@ -168,13 +200,12 @@ function restartGame() {
 
 /** Stops the current game and returns to the start screen. */
 function goToMenu() {
-    if (world) {
-        world.gameOver = true;
-        document.querySelector('.game-container').classList.remove('is-started');
-        document.getElementById('start-screen').classList.remove('display-none');
-        backgroundMusic.pause();
-        backgroundMusic.currentTime = 0;
-    }
+    if (!world) return;
+    world.gameOver = true;
+    document.querySelector('.game-container').classList.remove('is-started');
+    document.getElementById('start-screen').classList.remove('display-none');
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
 }
 
 

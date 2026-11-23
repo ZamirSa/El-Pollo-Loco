@@ -30,7 +30,7 @@ class DrawableObject {
     /** Returns whether this object has a collision frame. */
     hasCollisionFrame() {
         return this instanceof Character || this instanceof Chicken || this instanceof Coins
-            || this instanceof Bottle || this instanceof ChickenSmall || this instanceof Endboss;
+            || this instanceof Bottle || this instanceof Endboss;
     }
 
     /**

@@ -5,10 +5,10 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
-    statusBar = new StatusBar();
-    statusBarCoin = new StatusBarCoin();
-    statusBarBottle = new StatusBarBottle();
-    statusBarEndboss = new StatusBarEndboss();
+    statusBar = new StatusBar(STATUS_BAR_CONFIGS.health);
+    statusBarCoin = new StatusBar(STATUS_BAR_CONFIGS.coin);
+    statusBarBottle = new StatusBar(STATUS_BAR_CONFIGS.bottle);
+    statusBarEndboss = new StatusBar(STATUS_BAR_CONFIGS.endboss);
     throwableObjects = [];
     cooldown = 0;
     bottleIndex = -1;
@@ -24,9 +24,8 @@ class World {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.level = createLevel1();
+        this.level = createLevelOne();
         if (restartRound) this.randomizeEnemies();
-        this.statusBarEndboss.world = this;
         this.draw();
         this.setWorld();
         this.run();
@@ -37,7 +36,7 @@ class World {
     /** Randomizes the horizontal positions of regular enemies. */
     randomizeEnemies() {
         this.level.enemies.forEach((enemy) => {
-            if (enemy instanceof Chicken || enemy instanceof ChickenSmall) {
+            if (enemy instanceof Chicken) {
                 enemy.x = 200 + Math.random() * 2100;
             }
         });
@@ -92,7 +91,7 @@ class World {
      * @param {boolean} direction Whether the character faces left.
      */
     throwBottle(direction) {
-        const bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, direction);
+        let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100, direction);
         if (direction) bottle.x = this.character.x + this.character.width - 100 - bottle.width;
         bottle.world = this;
         this.throwableObjects.push(bottle);
@@ -171,11 +170,11 @@ class World {
      * @returns {boolean} Whether the character is stomping the enemy.
      */
     isStompingEnemy(enemy) {
-        const characterBottom = this.character.y + this.character.height - this.character.offset.bottom;
-        const previousCharacterBottom = this.character.previousY + this.character.height - this.character.offset.bottom;
-        const enemyTop = enemy.y + enemy.offset.top;
-        const isDescending = this.character.speedY < 0 || this.character.previousY < this.character.y;
-        const crossedEnemyTop = previousCharacterBottom <= enemyTop && characterBottom >= enemyTop;
+        let characterBottom = this.character.y + this.character.height - this.character.offset.bottom;
+        let previousCharacterBottom = this.character.previousY + this.character.height - this.character.offset.bottom;
+        let enemyTop = enemy.y + enemy.offset.top;
+        let isDescending = this.character.speedY < 0 || this.character.previousY < this.character.y;
+        let crossedEnemyTop = previousCharacterBottom <= enemyTop && characterBottom >= enemyTop;
         return this.character.isColliding(enemy) && enemy.energy > 0 && isDescending && crossedEnemyTop;
     }
 
@@ -194,7 +193,7 @@ class World {
      */
     alertEndboss(endboss) {
         if (this.character.x >= endboss.x - 600) endboss.alerted = true;
-        if (endboss.alerted == true) this.statusBarEndboss.alert = true;
+        if (endboss.alerted == true) this.statusBarEndboss.x = 440;
     }
 
     /**

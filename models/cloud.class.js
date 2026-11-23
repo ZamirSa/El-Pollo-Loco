@@ -13,7 +13,7 @@ class Cloud extends MovableObject {
 
     /** Moves the cloud left across the background. */
     animate() {
-        const interval = setInterval(() => {
+        let interval = setInterval(() => {
             if (this.world && this.world.gameOver) {
                 clearInterval(interval);
                 return;

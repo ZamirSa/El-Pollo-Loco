@@ -1,32 +1,67 @@
+let CHICKEN_VARIANTS = {
+    normal: {
+        y: 355,
+        height: 70,
+        width: 70,
+        offset: { top: 4, bottom: 4, left: 2, right: 2 },
+        walkingImages: [
+            './img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
+            './img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
+            './img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
+        ],
+        deadImage: './img/3_enemies_chicken/chicken_normal/2_dead/dead.png',
+        deadSound: './audio/chicken-dead.mp3'
+    },
+    small: {
+        y: 380,
+        height: 45,
+        width: 45,
+        offset: { top: 5, bottom: 5, left: 5, right: 5 },
+        walkingImages: [
+            './img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+            './img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+            './img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
+        ],
+        deadImage: './img/3_enemies_chicken/chicken_small/2_dead/dead.png',
+        deadSound: './audio/chicken-small-dead.wav'
+    }
+};
+
 class Chicken extends MovableObject {
-    y = 355;
-    height = 70;
-    width = 70;
-    offset = {
-        top: 4,
-        bottom: 4,
-        left: 2,
-        right: 2
-    };
-    IMAGES_WALKING = [
-        './img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-        './img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
-        './img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
-    ];
-    IMAGES_DEAD = ['./img/3_enemies_chicken/chicken_normal/2_dead/dead.png'];
-
-    AUDIO_DEAD = [
-        './audio/chicken-dead.mp3']
-
-    /** Creates a chicken and starts its animation loops. */
-    constructor() {
-        super().loadImage('./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
-        this.loadImages([...this.IMAGES_WALKING, ...this.IMAGES_DEAD]);
-        this.deadSound = createGameAudio(this.AUDIO_DEAD);
-        this.deadSound.volume = 0.5;
-        this.x = 300 + Math.random() * 2100; // Zahl zwischen 200 und 700
-        this.speed = 0.15 + Math.random() * 0.25;
+    /** Creates a chicken variant and starts its animation loops. */
+    constructor(variantName = 'normal') {
+        super();
+        let variant = CHICKEN_VARIANTS[variantName];
+        if (!variant) throw new RangeError(`Unknown chicken variant: ${variantName}`);
+        this.configureVariant(variant);
+        this.loadVariantImages(variant);
+        this.initializeDeadSound(variant);
+        this.initializeMovement();
         this.animate();
+    }
+
+    configureVariant(variant) {
+        this.y = variant.y;
+        this.height = variant.height;
+        this.width = variant.width;
+        this.offset = { ...variant.offset };
+        this.IMAGES_WALKING = variant.walkingImages;
+        this.IMAGES_DEAD = [variant.deadImage];
+    }
+
+    loadVariantImages(variant) {
+        this.loadImage(variant.walkingImages[0]);
+        this.loadImages([...this.IMAGES_WALKING, ...this.IMAGES_DEAD]);
+    }
+
+    initializeDeadSound(variant) {
+        this.deadSound = createGameAudio(variant.deadSound);
+        this.deadSound.volume = 0.5;
+    }
+
+    initializeMovement() {
+        this.x = 300 + Math.random() * 2100;
+        this.speed = 0.15 + Math.random() * 0.25;
     }
 
     /** Starts the chicken movement, animation, and sound intervals. */

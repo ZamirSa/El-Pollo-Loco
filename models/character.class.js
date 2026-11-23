@@ -185,14 +185,29 @@ class Character extends MovableObject {
     updateJumpAnimation() {
         if (this.world && this.world.gameOver) return;
         if (!this.isAboveGround()) {
-            this.airAnimation = null;
-            this.airAnimationFrame = 0;
+            this.resetAirAnimation();
             return;
         }
-        const images = this.speedY > 0 ? this.IMAGES_JUMPING
+        let images = this.getAirAnimationImages();
+        if (!images) return;
+        this.updateAirAnimation(images);
+    }
+
+    /** Clears jump animation state when the character is grounded. */
+    resetAirAnimation() {
+        this.airAnimation = null;
+        this.airAnimationFrame = 0;
+    }
+
+    /** Selects the jump or falling frames for the current vertical speed. */
+    getAirAnimationImages() {
+        return this.speedY > 0 ? this.IMAGES_JUMPING
             : this.speedY < 0 ? this.IMAGES_FALLING
                 : null;
-        if (!images) return;
+    }
+
+    /** Advances the active airborne animation by one frame. */
+    updateAirAnimation(images) {
         if (this.airAnimation !== images) {
             this.airAnimation = images;
             this.airAnimationFrame = 0;

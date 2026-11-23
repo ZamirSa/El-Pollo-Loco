@@ -123,7 +123,7 @@ canvas {
     -webkit-touch-callout: none;
 }
 
-.mobile-controls button:active {
+.mobile-controls button.is-pressed {
     background: rgba(244, 197, 66, 0.85);
     color: #222;
 }
@@ -202,23 +202,39 @@ canvas {
     font-size: 20px;
 }
 
+.impressum-content a {
+    color: #222;
+}
+
 .site-footer {
     margin-top: 8px;
     font-size: 18px;
-}
-
-.site-footer button,
-.impressum-content a {
-    color: #222;
 }
 
 .site-footer button {
     padding: 0;
     border: 0;
     background: none;
+    color: #222;
     cursor: pointer;
     font: inherit;
     text-decoration: underline;
+}
+
+.start-impressum {
+    display: none;
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    padding: 4px 8px;
+    border: 0;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    text-decoration: underline;
+    font-size: 18px;
 }
 
 .impressum-dialog {
@@ -364,19 +380,11 @@ canvas {
     }
 
     .site-footer {
-        position: fixed;
-        z-index: 3;
-        right: max(12px, env(safe-area-inset-right));
-        bottom: calc(max(12px, env(safe-area-inset-bottom)) + clamp(68px, 7vw, 88px) + 12px);
-        margin: 0;
-        padding: 4px 8px;
-        border-radius: 6px;
-        background: rgba(0, 0, 0, 0.6);
-        font-size: 18px;
+        display: none;
     }
 
-    .site-footer button {
-        color: #fff;
+    .start-impressum {
+        display: block;
     }
 
     h1 {
@@ -518,11 +526,6 @@ canvas {
     .game-won button {
         padding: 12px 24px;
         font-size: 24px;
-    }
-
-    .site-footer {
-        padding: 8px 12px;
-        font-size: 22px;
     }
 
     .audio-controls {
